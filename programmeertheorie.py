@@ -6,8 +6,8 @@ np.random.seed(19680801)
 
 plt.axis([0, 160, 0, 180])
 
-NMaison = 3
-NBungalow = 5
+NMaison = 1
+NBungalow = 3
 NEengezins = 12
 
 dataOne = np.random.random(NMaison)
@@ -25,6 +25,6 @@ for i in range(NBungalow):
 for i in range(NEengezins):
     x = np.random.randint(0, 160)
     y = np.random.randint(0, 180)
-    plt.scatter(x, y, s=1000, marker="s", c="red")
+    plt.scatter(x, y, s=100, marker="s", c="red")
 
 plt.show()
