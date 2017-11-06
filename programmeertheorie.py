@@ -1,30 +1,57 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+# import pylab
 
-# Fixing random state for reproducibility
-np.random.seed(19680801)
+# axes = pylab.axes()
+# pylab.axis("scaled")
 
-plt.axis([0, 160, 0, 180])
+# plt.axis([0, 160, 0, 180])
 
-NMaison = 1
-NBungalow = 3
-NEengezins = 12
+fig, ax = plt.subplots()
+ax.plot(160, 180)
+ax.set_title('AmstelHaege')
 
-dataOne = np.random.random(NMaison)
-dataTwo = np.random.random(NBungalow)
-dataThree = np.random.random(NEengezins)
+sumHouses = 1
+
+NMaison = 3 * sumHouses
+NBungalow = 5 * sumHouses
+NEengezins = 12 * sumHouses
+value = 0
 
 for i in range(NMaison):
     x = np.random.randint(0, 160)
     y = np.random.randint(0, 180)
-    plt.scatter(x, y, marker="s", c="yellow")
+    plt.scatter(x, y, s=0, marker="s", c="yellow")
+    rect = patches.Rectangle((x, y), 11, 10.5, angle=0.0, linewidth=1,
+                             edgecolor="black", facecolor="yellow")
+    ax.add_patch(rect)
+    value += 610000
 for i in range(NBungalow):
     x = np.random.randint(0, 160)
     y = np.random.randint(0, 180)
-    plt.scatter(x, y, s=100, marker="s", c="orange")
+    plt.scatter(x, y, s=0, marker="s", c="orange")
+    rect = patches.Rectangle((x, y), 10, 7.5, angle=0.0, linewidth=1,
+                             edgecolor="black", facecolor="orange")
+    ax.add_patch(rect)
+    value += 399000
 for i in range(NEengezins):
     x = np.random.randint(0, 160)
     y = np.random.randint(0, 180)
-    plt.scatter(x, y, s=100, marker="s", c="red")
+    plt.scatter(x, y, s=0, marker="s", c="red")
+    rect = patches.Rectangle((x, y), 8, 8, angle=0.0, linewidth=1,
+                             edgecolor="black", facecolor="red")
+    ax.add_patch(rect)
+    value += 285000
+
+print(value)
+# fig.savefig('yourfilename.png')
 
 plt.show()
+
+# circle1 = pylab.Circle((0,0), radius=20, alpha=.5)
+# circle2 = pylab.Circle((0.5,0.5), radius=20, alpha=.5)
+# axes.add_patch(circle1)
+# axes.add_patch(circle2)
+# pylab.axis('scaled')
+# pylab.show()
