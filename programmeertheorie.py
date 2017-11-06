@@ -9,8 +9,14 @@ import matplotlib.patches as patches
 # plt.axis([0, 160, 0, 180])
 
 fig, ax = plt.subplots()
-ax.plot(160, 180)
+ax.set_xlim(xmin=0, xmax=180)
+ax.set_ylim(ymin=0, ymax=160)
+# ax.plot()
+# , range(10)
+ax.set_aspect('equal', adjustable='box')
+# , projection='3d'
 ax.set_title('AmstelHaege')
+ax.tick_params(length=2, width=1)
 
 sumHouses = 1
 
@@ -20,24 +26,24 @@ NEengezins = 12 * sumHouses
 value = 0
 
 for i in range(NMaison):
-    x = np.random.randint(0, 160)
-    y = np.random.randint(0, 180)
+    x = np.random.randint(0, 180)
+    y = np.random.randint(0, 160)
     plt.scatter(x, y, s=0, marker="s", c="yellow")
     rect = patches.Rectangle((x, y), 11, 10.5, angle=0.0, linewidth=1,
                              edgecolor="black", facecolor="yellow")
     ax.add_patch(rect)
     value += 610000
 for i in range(NBungalow):
-    x = np.random.randint(0, 160)
-    y = np.random.randint(0, 180)
+    x = np.random.randint(0, 180)
+    y = np.random.randint(0, 160)
     plt.scatter(x, y, s=0, marker="s", c="orange")
     rect = patches.Rectangle((x, y), 10, 7.5, angle=0.0, linewidth=1,
                              edgecolor="black", facecolor="orange")
     ax.add_patch(rect)
     value += 399000
 for i in range(NEengezins):
-    x = np.random.randint(0, 160)
-    y = np.random.randint(0, 180)
+    x = np.random.randint(0, 180)
+    y = np.random.randint(0, 160)
     plt.scatter(x, y, s=0, marker="s", c="red")
     rect = patches.Rectangle((x, y), 8, 8, angle=0.0, linewidth=1,
                              edgecolor="black", facecolor="red")
