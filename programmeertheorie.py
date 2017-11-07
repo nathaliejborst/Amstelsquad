@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+from matplotlib.patches import FancyBboxPatch
 # import pylab
 
 # axes = pylab.axes()
@@ -32,6 +33,10 @@ for i in range(NMaison):
     rect = patches.Rectangle((x, y), 11, 10.5, angle=0.0, linewidth=1,
                              edgecolor="black", facecolor="yellow")
     ax.add_patch(rect)
+    freespace = FancyBboxPatch((x - 6, y - 6), 23.0, 22.5, boxstyle='square,\
+    pad=0', transform=ax.transData, ec='black', fill=False)
+    ax.add_patch(freespace)
+
     value += 610000
 for i in range(NBungalow):
     x = np.random.randint(0, 180)
@@ -40,6 +45,10 @@ for i in range(NBungalow):
     rect = patches.Rectangle((x, y), 10, 7.5, angle=0.0, linewidth=1,
                              edgecolor="black", facecolor="orange")
     ax.add_patch(rect)
+    freespace = FancyBboxPatch((x - 3, y - 3), 16.0, 13.5, boxstyle='square,\
+    pad=0', transform=ax.transData, ec='black', fill=False)
+    ax.add_patch(freespace)
+
     value += 399000
 for i in range(NEengezins):
     x = np.random.randint(0, 180)
@@ -48,6 +57,10 @@ for i in range(NEengezins):
     rect = patches.Rectangle((x, y), 8, 8, angle=0.0, linewidth=1,
                              edgecolor="black", facecolor="red")
     ax.add_patch(rect)
+    freespace = FancyBboxPatch((x - 2, y - 2), 12.0, 12.0, boxstyle='square,\
+    pad=0', transform=ax.transData, ec='black', fill=False)
+    ax.add_patch(freespace)
+
     value += 285000
 
 print(value)
