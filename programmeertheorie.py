@@ -25,6 +25,7 @@ NMaison = 3 * sumHouses
 NBungalow = 5 * sumHouses
 NEengezins = 12 * sumHouses
 value = 0
+# testarrayx = []
 
 for i in range(NMaison):
     x = np.random.randint(0, 180)
@@ -36,8 +37,12 @@ for i in range(NMaison):
     freespace = FancyBboxPatch((x - 6, y - 6), 23.0, 22.5, boxstyle='round,\
     pad=0, rounding_size=10', transform=ax.transData, ec='black', fill=False)
     ax.add_patch(freespace)
+    # testarrayx.append(x)
+    # testarrayy = np.array(y)
+    # print(testarrayx)
 
     value += 610000
+
 for i in range(NBungalow):
     x = np.random.randint(0, 180)
     y = np.random.randint(0, 160)
@@ -50,6 +55,7 @@ for i in range(NBungalow):
     ax.add_patch(freespace)
 
     value += 399000
+
 for i in range(NEengezins):
     x = np.random.randint(0, 180)
     y = np.random.randint(0, 160)
