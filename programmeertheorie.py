@@ -33,8 +33,8 @@ for i in range(NMaison):
     rect = patches.Rectangle((x, y), 11, 10.5, angle=0.0, linewidth=1,
                              edgecolor="black", facecolor="yellow")
     ax.add_patch(rect)
-    freespace = FancyBboxPatch((x - 6, y - 6), 23.0, 22.5, boxstyle='square,\
-    pad=0', transform=ax.transData, ec='black', fill=False)
+    freespace = FancyBboxPatch((x - 6, y - 6), 23.0, 22.5, boxstyle='round,\
+    pad=0, rounding_size=10', transform=ax.transData, ec='black', fill=False)
     ax.add_patch(freespace)
 
     value += 610000
