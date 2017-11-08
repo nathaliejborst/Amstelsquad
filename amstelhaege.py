@@ -11,15 +11,24 @@ import matplotlib.patches as patches
 # Declare elements of house in class.
 class House:
 
-    def __init__(self, width, height, freespace, value, valueUpdate):
+    def __init__(self, width, height, freespace, value, valueUpdate, x=0, y=0):
         self.width = width
         self.height = height
         self.freespace = freespace
         self.value = value
         self.valueUpdate = valueUpdate
+        self.x = x
+        self.y = y
 
     def area(self):
         return self.width * self.height
+
+    def corners(self, x, y):
+        bottomLeft = [x, y]
+        upperLeft = [x, (y + self.height)]
+        upperRight = [(x + self.width), (y + self.height)]
+        bottomRight = [(x + self.width), y]
+        return {'bottomLeft': bottomLeft, 'upperLeft':upperLeft, 'upperRight':upperRight, 'bottomRight':bottomRight}
 
     def addFreespace(self, meter):
         self.meter = meter
@@ -33,6 +42,19 @@ class House:
         return self.height + self.freespace * 2
 
 
+# Start of creating a class for the grid (doesn't do anything yet)
+class Grid:
+    def __init__(self, bottomRight, bottomLeft, upperLeft, upperRight)
+    self.bottomRight = bottomRight
+    self.bottomLeft = bottomLeft
+    self.upperLeft = upperLeft
+    self.upperRight = upperRight
+
+
+
+
+
+
 # Declaration of different houseTypes.
 maison = House(width=11, height=10.5, freespace=6, value=610000,
                valueUpdate=1.06)
@@ -42,6 +64,7 @@ bungalow = House(width=10, height=7.5, freespace=3, value=399000,
 
 familyHouse = House(width=8, height=8, freespace=2, value=285000,
                     valueUpdate=1.03)
+
 
 
 # Declare restrictions for Amstelheage area.
@@ -61,9 +84,10 @@ amountOfMaisons = 3 * areaVariant
 amountOfBungalows = 5 * areaVariant
 amountOfFamilyHouses = 12 * areaVariant
 
+coordinatesList = []
 
 # Plots the houses per type of house.
-def plotHouses(amountOfHouses, houseType, areaWidth, areaHeight, color):
+def plotHouses(amountOfHouses, houseType, color):
 
     for i in range(amountOfHouses):
         # Choose random x and y coordinates.
@@ -92,10 +116,22 @@ def plotHouses(amountOfHouses, houseType, areaWidth, areaHeight, color):
                                               edgecolor='black',
                                               fill=False))
 
+        # Checks if cornerpoint intersects with house to be placed
+        # for i in range(len(coordinatesList)):
+        #     if ((x > coordinatesList[i]['bottomLeft'][0] and x < coordinatesList[i]['bottomRight'][0]) and (y > coordinatesList[i]['bottomLeft'][1] and y < coordinatesList[i]['upperLeft'][1])):
+        #         print("intersect")
+        #
+        # print(len(coordinatesList))
 
-plotHouses(amountOfMaisons, maison, areaWidth, areaHeight, "red")
-plotHouses(amountOfBungalows, bungalow, areaWidth, areaHeight, "orange")
-plotHouses(amountOfFamilyHouses, familyHouse, areaWidth, areaHeight, "yellow")
+
+
+        # Create tuple of all coordinates of houses
+        coordinatesList.append(houseType.corners(x, y))
+
+
+plotHouses(amountOfMaisons, maison, "red")
+plotHouses(amountOfBungalows, bungalow, "orange")
+plotHouses(amountOfFamilyHouses, familyHouse, "yellow")
 
 # Plot Amstelheage area.
 plt.show()
