@@ -33,7 +33,7 @@ class House:
         return self.height + self.freespace * 2
 
 
-# Declaration of different housetypes.
+# Declaration of different houseTypes.
 maison = House(width=11, height=10.5, freespace=6, value=610000,
                valueUpdate=1.06)
 
@@ -61,39 +61,40 @@ amountOfMaisons = 3 * areaVariant
 amountOfBungalows = 5 * areaVariant
 amountOfFamilyHouses = 12 * areaVariant
 
+
 # Plots the houses per type of house.
-def plotHouses (AmountOfHouses, HouseType, areaWidth, areaHeight, color):
+def plotHouses(amountOfHouses, houseType, areaWidth, areaHeight, color):
 
-
-
-    for i in range(AmountOfHouses):
+    for i in range(amountOfHouses):
         # Choose random x and y coordinates.
-        x = np.random.randint(low=HouseType.freespace,
-                              high=areaWidth -HouseType.freespace - HouseType.width)
+        x = np.random.randint(low=houseType.freespace, high=areaWidth -
+                              houseType.freespace - houseType.width)
 
-        y = np.random.randint(low=HouseType.freespace,
-                              high=areaHeight - HouseType.freespace -
-                              HouseType.height)
+        y = np.random.randint(low=houseType.freespace,
+                              high=areaHeight - houseType.freespace -
+                              houseType.height)
 
         # Add bungalow to area.
         area.add_patch(patches.Rectangle((x, y),
-                                         width=HouseType.width,
-                                         height=HouseType.height,
-                                         angle=0.0, linewidth=1, edgecolor="black",
+                                         width=houseType.width,
+                                         height=houseType.height,
+                                         angle=0.0, linewidth=1,
+                                         edgecolor="black",
                                          facecolor=color))
 
         # Add freespace around bungalow.
-        area.add_patch(patches.FancyBboxPatch((x - HouseType.freespace,
-                                              y - HouseType.freespace),
-                                              width=HouseType.totalWidth(),
-                                              height=HouseType.totalHeight(),
+        area.add_patch(patches.FancyBboxPatch((x - houseType.freespace,
+                                              y - houseType.freespace),
+                                              width=houseType.totalWidth(),
+                                              height=houseType.totalHeight(),
                                               boxstyle='round, pad=0,\
                                               rounding_size=0',
                                               edgecolor='black',
                                               fill=False))
 
-plotHouses(amountOfBungalows, bungalow, areaWidth, areaHeight, "orange")
+
 plotHouses(amountOfMaisons, maison, areaWidth, areaHeight, "red")
+plotHouses(amountOfBungalows, bungalow, areaWidth, areaHeight, "orange")
 plotHouses(amountOfFamilyHouses, familyHouse, areaWidth, areaHeight, "yellow")
 
 # Plot Amstelheage area.
