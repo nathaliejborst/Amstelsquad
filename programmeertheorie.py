@@ -28,3 +28,7 @@ for i in range(NEengezins):
     plt.scatter(x, y, s=1000, marker="s", c="red")
 
 plt.show()
+
+print NMaison
+
+print 2
