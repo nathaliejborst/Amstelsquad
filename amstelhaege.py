@@ -28,7 +28,8 @@ class House:
         upperLeft = [x, (y + self.height)]
         upperRight = [(x + self.width), (y + self.height)]
         bottomRight = [(x + self.width), y]
-        return {'bottomLeft': bottomLeft, 'upperLeft':upperLeft, 'upperRight':upperRight, 'bottomRight':bottomRight}
+        return {'bottomLeft': bottomLeft, 'upperLeft': upperLeft,
+                'upperRight': upperRight, 'bottomRight': bottomRight}
 
     def addFreespace(self, meter):
         self.meter = meter
@@ -44,18 +45,15 @@ class House:
 
 # Start of creating a class for the grid (doesn't do anything yet)
 class Grid:
-    def __init__(self, bottomRight, bottomLeft, upperLeft, upperRight)
-    self.bottomRight = bottomRight
-    self.bottomLeft = bottomLeft
-    self.upperLeft = upperLeft
-    self.upperRight = upperRight
+
+    def __init__(self, bottomRight, bottomLeft, upperLeft, upperRight):
+        self.bottomRight = bottomRight
+        self.bottomLeft = bottomLeft
+        self.upperLeft = upperLeft
+        self.upperRight = upperRight
 
 
-
-
-
-
-# Declaration of different houseTypes.
+# Declaration of different housetypes.
 maison = House(width=11, height=10.5, freespace=6, value=610000,
                valueUpdate=1.06)
 
@@ -66,9 +64,7 @@ familyHouse = House(width=8, height=8, freespace=2, value=285000,
                     valueUpdate=1.03)
 
 
-
 # Declare restrictions for Amstelheage area.
-
 areaWidth = 180
 areaHeight = 160
 fig, area = plt.subplots()
@@ -85,6 +81,7 @@ amountOfBungalows = 5 * areaVariant
 amountOfFamilyHouses = 12 * areaVariant
 
 coordinatesList = []
+
 
 # Plots the houses per type of house.
 def plotHouses(amountOfHouses, houseType, color):
@@ -122,8 +119,6 @@ def plotHouses(amountOfHouses, houseType, color):
         #         print("intersect")
         #
         # print(len(coordinatesList))
-
-
 
         # Create tuple of all coordinates of houses
         coordinatesList.append(houseType.corners(x, y))
