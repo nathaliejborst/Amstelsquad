@@ -76,7 +76,7 @@ area.set_title('Amstelhaege')
 
 # Declare possible area variants by setting matching amount of housetypes
 # Choose area variant by changing areaVariant to 1, 2 or 3.
-areaVariant = 1
+areaVariant = 3
 amountOfMaisons = 3 * areaVariant
 amountOfBungalows = 5 * areaVariant
 amountOfFamilyHouses = 12 * areaVariant
@@ -133,6 +133,7 @@ def plotHouses(amountOfHouses, houseType, color):
                     newHouse.remove()
                     space.remove()
                     i -= 1
+                    break
         i += 1
 
         # Create list of all coordinates of houses
