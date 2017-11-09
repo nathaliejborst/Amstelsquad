@@ -6,6 +6,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
+from shapely.geometry import Polygon
 
 
 # Declare elements of house in class.
@@ -85,8 +86,8 @@ coordinatesList = []
 
 # Plots the houses per type of house.
 def plotHouses(amountOfHouses, houseType, color):
-
-    for i in range(amountOfHouses):
+    i = 0
+    while i < amountOfHouses:
         # Choose random x and y coordinates.
         x = np.random.randint(low=houseType.freespace, high=areaWidth -
                               houseType.freespace - houseType.width)
@@ -96,31 +97,45 @@ def plotHouses(amountOfHouses, houseType, color):
                               houseType.height)
 
         # Add bungalow to area.
-        area.add_patch(patches.Rectangle((x, y),
-                                         width=houseType.width,
-                                         height=houseType.height,
-                                         angle=0.0, linewidth=1,
-                                         edgecolor="black",
-                                         facecolor=color))
+        newHouse = area.add_patch(patches.Rectangle((x, y),
+                                                    width=houseType.width,
+                                                    height=houseType.height,
+                                                    angle=0.0, linewidth=1,
+                                                    edgecolor="black",
+                                                    facecolor=color))
 
         # Add freespace around bungalow.
-        area.add_patch(patches.FancyBboxPatch((x - houseType.freespace,
-                                              y - houseType.freespace),
-                                              width=houseType.totalWidth(),
-                                              height=houseType.totalHeight(),
-                                              boxstyle='round, pad=0,\
-                                              rounding_size=0',
-                                              edgecolor='black',
-                                              fill=False))
+        space = area.add_patch(patches.FancyBboxPatch((x - houseType.freespace,
+                                                      y - houseType.freespace),
+                                                      width=houseType.totalWidth(),
+                                                      height=houseType.totalHeight(),
+                                                      boxstyle='round, pad=0,\
+                                                      rounding_size=0',
+                                                      edgecolor='black',
+                                                      fill=False))
 
-        # Checks if cornerpoint intersects with house to be placed
-        # for i in range(len(coordinatesList)):
-        #     if ((x > coordinatesList[i]['bottomLeft'][0] and x < coordinatesList[i]['bottomRight'][0]) and (y > coordinatesList[i]['bottomLeft'][1] and y < coordinatesList[i]['upperLeft'][1])):
-        #         print("intersect")
-        #
-        # print(len(coordinatesList))
+        # Checks if new house intersects with consisting houses.
+        for j in range(len(coordinatesList)):
+            p1 = Polygon([(x, y), (x + houseType.width, y),
+                         (x + houseType.width, y + houseType.height),
+                         (x, y + houseType.height), (x, y)])
+            p2 = Polygon([(coordinatesList[j]["bottomLeft"][0],
+                         coordinatesList[j]["bottomLeft"][1]),
+                         (coordinatesList[j]["bottomRight"][0],
+                         coordinatesList[j]["bottomRight"][1]),
+                         (coordinatesList[j]["upperRight"][0],
+                         coordinatesList[j]["upperRight"][1]),
+                         (coordinatesList[j]["upperLeft"][0],
+                         coordinatesList[j]["upperLeft"][1]),
+                         (coordinatesList[j]["bottomLeft"][0],
+                         coordinatesList[j]["bottomLeft"][1])])
+            if p1.disjoint(p2) is False:
+                    newHouse.remove()
+                    space.remove()
+                    i -= 1
+        i += 1
 
-        # Create tuple of all coordinates of houses
+        # Create list of all coordinates of houses
         coordinatesList.append(houseType.corners(x, y))
 
 
