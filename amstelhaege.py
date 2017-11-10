@@ -64,6 +64,8 @@ bungalow = House(width=10, height=7.5, freespace=3, value=399000,
 familyHouse = House(width=8, height=8, freespace=2, value=285000,
                     valueUpdate=1.03)
 
+water = House(width=144, height=40, freespace=0, value=0, valueUpdate=0)
+
 
 # Declare restrictions for Amstelheage area.
 areaWidth = 180
@@ -76,7 +78,8 @@ area.set_title('Amstelhaege')
 
 # Declare possible area variants by setting matching amount of housetypes
 # Choose area variant by changing areaVariant to 1, 2 or 3.
-areaVariant = 3
+areaVariant = 1
+amountOWater = 1
 amountOfMaisons = 3 * areaVariant
 amountOfBungalows = 5 * areaVariant
 amountOfFamilyHouses = 12 * areaVariant
@@ -140,6 +143,7 @@ def plotHouses(amountOfHouses, houseType, color):
         coordinatesList.append(houseType.corners(x, y))
 
 
+plotHouses(amountOWater, water, "blue")
 plotHouses(amountOfMaisons, maison, "red")
 plotHouses(amountOfBungalows, bungalow, "orange")
 plotHouses(amountOfFamilyHouses, familyHouse, "yellow")
