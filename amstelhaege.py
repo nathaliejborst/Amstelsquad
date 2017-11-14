@@ -8,6 +8,9 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from shapely.geometry import Polygon
 
+# Fixing random state for reproducibility
+np.random.seed(0)
+
 
 # Declare elements of house in class.
 class House:
@@ -87,8 +90,8 @@ area.set_title('Amstelhaege')
 
 # Declare possible area variants by setting matching amount of housetypes
 # Choose area variant by changing areaVariant to 1, 2 or 3.
-areaVariant = 1
-amountOWater = 1
+areaVariant = 2
+amountOWater = 0
 amountOfMaisons = 3 * areaVariant
 amountOfBungalows = 5 * areaVariant
 amountOfFamilyHouses = 12 * areaVariant
@@ -100,6 +103,7 @@ spaceList = []
 # Plots the houses per type of house.
 def plotHouses(amountOfHouses, houseType, color):
     i = 0
+    count = 0
     while i < amountOfHouses:
         # Choose random x and y coordinates.
         x = np.random.randint(low=houseType.freespace, high=areaWidth -
@@ -157,7 +161,10 @@ def plotHouses(amountOfHouses, houseType, color):
                          spaceList[j]["upperLeft"][1]),
                          (spaceList[j]["bottomLeft"][0],
                          spaceList[j]["bottomLeft"][1])])
-            if p1.disjoint(p2) is False and p1.disjoint(s2) is False and s1.disjoint(p2) is False:
+            if p1.intersects(p2) is True or p1.intersects(s2) is True or s1.intersects(p2) is True:
+                    print(count)
+                    count += 1
+                    # print(newHouse)
                     newHouse.remove()
                     space.remove()
                     i -= 1
