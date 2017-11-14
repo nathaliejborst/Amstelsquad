@@ -32,10 +32,19 @@ class House:
         return {'bottomLeft': bottomLeft, 'upperLeft': upperLeft,
                 'upperRight': upperRight, 'bottomRight': bottomRight}
 
+    def spacecorners(self, x, y):
+                bottomLeft = [x - self.freespace, y - self.freespace]
+                upperLeft = [x - self.freespace, (y + self.height + self.freespace)]
+                upperRight = [(x + self.width + self.freespace), (y + self.height + self.freespace)]
+                bottomRight = [(x + self.width + self.freespace), y - self.freespace]
+                return {'bottomLeft': bottomLeft, 'upperLeft': upperLeft,
+                        'upperRight': upperRight, 'bottomRight': bottomRight}
+
     def addFreespace(self, meter):
         self.meter = meter
         self.freespace += meter
         self.value = round(self.value * self.valueUpdate ** int(meter), 2)
+        return self.freespace, self.value
 
     def totalWidth(self):
         return self.width + self.freespace * 2
@@ -85,6 +94,7 @@ amountOfBungalows = 5 * areaVariant
 amountOfFamilyHouses = 12 * areaVariant
 
 coordinatesList = []
+spaceList = []
 
 
 # Plots the houses per type of house.
@@ -113,7 +123,7 @@ def plotHouses(amountOfHouses, houseType, color):
                                                       width=houseType.totalWidth(),
                                                       height=houseType.totalHeight(),
                                                       boxstyle='round, pad=0,\
-                                                      rounding_size=0',
+                                                      rounding_size={}'.format(houseType.freespace),
                                                       edgecolor='black',
                                                       fill=False))
 
@@ -132,7 +142,22 @@ def plotHouses(amountOfHouses, houseType, color):
                          coordinatesList[j]["upperLeft"][1]),
                          (coordinatesList[j]["bottomLeft"][0],
                          coordinatesList[j]["bottomLeft"][1])])
-            if p1.disjoint(p2) is False:
+            s1 = Polygon([(x - houseType.freespace, y - houseType.freespace),
+                         (x + houseType.width + houseType.freespace, y - houseType.freespace),
+                         (x + houseType.width + houseType.freespace, y + houseType.height + houseType.freespace),
+                         (x - houseType.freespace, y + houseType.height + houseType.freespace),
+                         (x - houseType.freespace, y - houseType.freespace)])
+            s2 = Polygon([(spaceList[j]["bottomLeft"][0],
+                         spaceList[j]["bottomLeft"][1]),
+                         (spaceList[j]["bottomRight"][0],
+                         spaceList[j]["bottomRight"][1]),
+                         (spaceList[j]["upperRight"][0],
+                         spaceList[j]["upperRight"][1]),
+                         (spaceList[j]["upperLeft"][0],
+                         spaceList[j]["upperLeft"][1]),
+                         (spaceList[j]["bottomLeft"][0],
+                         spaceList[j]["bottomLeft"][1])])
+            if p1.disjoint(p2) is False and p1.disjoint(s2) is False and s1.disjoint(p2) is False:
                     newHouse.remove()
                     space.remove()
                     i -= 1
@@ -141,12 +166,16 @@ def plotHouses(amountOfHouses, houseType, color):
 
         # Create list of all coordinates of houses
         coordinatesList.append(houseType.corners(x, y))
+        spaceList.append(houseType.spacecorners(x, y))
 
 
 plotHouses(amountOWater, water, "blue")
 plotHouses(amountOfMaisons, maison, "red")
 plotHouses(amountOfBungalows, bungalow, "orange")
 plotHouses(amountOfFamilyHouses, familyHouse, "yellow")
+
+# print(coordinatesList)
+# print(spaceList)
 
 # Plot Amstelheage area.
 plt.show()
