@@ -9,7 +9,7 @@ import matplotlib.patches as patches
 from shapely.geometry import Polygon
 
 # Fixing random state for reproducibility
-np.random.seed(0)
+# np.random.seed(0)
 
 
 # Declare elements of house in class.
@@ -90,7 +90,7 @@ area.set_title('Amstelhaege')
 
 # Declare possible area variants by setting matching amount of housetypes
 # Choose area variant by changing areaVariant to 1, 2 or 3.
-areaVariant = 2
+areaVariant = 1
 amountOWater = 0
 amountOfMaisons = 3 * areaVariant
 amountOfBungalows = 5 * areaVariant
@@ -176,13 +176,68 @@ def plotHouses(amountOfHouses, houseType, color):
         spaceList.append(houseType.spacecorners(x, y))
 
 
+def calculate():
+    count = 0
+    for j in range(len(spaceList)):
+        x = 1 + count
+        y = 1 + count
+
+        s1 = Polygon([(spaceList[j]["bottomLeft"][0] - x,
+                       spaceList[j]["bottomLeft"][1] - y),
+                      (spaceList[j]["bottomRight"][0] + x,
+                       spaceList[j]["bottomRight"][1] - y),
+                      (spaceList[j]["upperRight"][0] + x,
+                       spaceList[j]["upperRight"][1] + y),
+                      (spaceList[j]["upperLeft"][0] - x,
+                       spaceList[j]["upperLeft"][1] + y),
+                      (spaceList[j]["bottomLeft"][0] - x,
+                       spaceList[j]["bottomLeft"][1] - y)])
+
+        # NIEUWE EXTRA SPACE PLOTTEN
+
+        for k in range(len(coordinatesList)):
+            p1 = Polygon([(coordinatesList[k]["bottomLeft"][0],
+                         coordinatesList[k]["bottomLeft"][1]),
+                         (coordinatesList[k]["bottomRight"][0],
+                         coordinatesList[k]["bottomRight"][1]),
+                         (coordinatesList[k]["upperRight"][0],
+                         coordinatesList[k]["upperRight"][1]),
+                         (coordinatesList[k]["upperLeft"][0],
+                         coordinatesList[k]["upperLeft"][1]),
+                         (coordinatesList[k]["bottomLeft"][0],
+                         coordinatesList[k]["bottomLeft"][1])])
+
+            if s1.touches(p1) is True:
+
+                s1 = Polygon([(spaceList[j]["bottomLeft"][0] + x,
+                               spaceList[j]["bottomLeft"][1] + y),
+                              (spaceList[j]["bottomRight"][0] - x,
+                               spaceList[j]["bottomRight"][1] + y),
+                              (spaceList[j]["upperRight"][0] - x,
+                               spaceList[j]["upperRight"][1] - y),
+                              (spaceList[j]["upperLeft"][0] + x,
+                               spaceList[j]["upperLeft"][1] - y),
+                              (spaceList[j]["bottomLeft"][0] + x,
+                               spaceList[j]["bottomLeft"][1] + y)])
+
+                # SPACE EXTRA WEGHALEN UIT PLOT
+
+                count = 0
+                break
+
+        # ALLE KLEINERE SPACES WEGHALEN UIT PLOT
+        count += 1  # X EN Y UIT SPACELIST KUNNEN BUITEN BOUNDERIES GAAN OF CHECKT touches DAAR OOK OP?
+        j -= 1  # J KAN ONDER 0 KOMEN
+
+
 plotHouses(amountOWater, water, "blue")
 plotHouses(amountOfMaisons, maison, "red")
 plotHouses(amountOfBungalows, bungalow, "orange")
 plotHouses(amountOfFamilyHouses, familyHouse, "yellow")
+calculate()
 
-# print(coordinatesList)
-# print(spaceList)
+print(coordinatesList)
+print(spaceList)
 
 # Plot Amstelheage area.
 plt.show()
