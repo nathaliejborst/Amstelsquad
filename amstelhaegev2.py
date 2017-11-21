@@ -294,4 +294,51 @@ for k in range(len(houses)):
 print("Total value: {}".format(round(grid.totalValue(grid.housesList), 2)))
 print("Total runtime: {}".format(datetime.now() - startTime))
 
+def Calculate():
+    count = 0
+    j = 0
+    while j < (len(houses)):
+        print("hoi1")
+        print(j)
+        x = 1 + count
+        y = 1 + count
+
+        s1 = Polygon([(houses[j].spacecorners(houses[j].x, houses[j].y)[0][0] - x, houses[j].spacecorners(houses[j].x, houses[j].y)[0][1] - y),
+        (houses[j].spacecorners(houses[j].x, houses[j].y)[1][0] + x, houses[j].spacecorners(houses[j].x, houses[j].y)[1][1] - y),
+        (houses[j].spacecorners(houses[j].x, houses[j].y)[2][0] + x, houses[j].spacecorners(houses[j].x, houses[j].y)[2][1] + y),
+        (houses[j].spacecorners(houses[j].x, houses[j].y)[3][0] - x, houses[j].spacecorners(houses[j].x, houses[j].y)[3][1] + y)])
+
+        print(s1)
+        # NIEUWE EXTRA SPACE PLOTTEN
+
+        for k in range(len(houses)):
+            p1 = Polygon([(houses[k].corners(houses[k].x, houses[k].y)[0][0], houses[k].corners(houses[k].x, houses[k].y)[0][1]),
+            (houses[k].corners(houses[k].x, houses[k].y)[1][0], houses[k].corners(houses[k].x, houses[k].y)[1][1]),
+            (houses[k].corners(houses[k].x, houses[k].y)[2][0], houses[k].corners(houses[k].x, houses[k].y)[2][1]),
+            (houses[k].corners(houses[k].x, houses[k].y)[3][0], houses[k].corners(houses[k].x, houses[k].y)[3][1])])
+
+            # print("hello1")
+
+            if s1.touches(p1) is True:
+
+                s1 = Polygon([(houses[j].spacecorners(houses[j].x, houses[j].y)[0][0] + x, houses[j].spacecorners(houses[j].x, houses[j].y)[0][1] + y),
+                        (houses[j].spacecorners(houses[j].x, houses[j].y)[1][0] - x, houses[j].spacecorners(houses[j].x, houses[j].y)[1][1] + y),
+                        (houses[j].spacecorners(houses[j].x, houses[j].y)[2][0] - x, houses[j].spacecorners(houses[j].x, houses[j].y)[2][1] - y),
+                        (houses[j].spacecorners(houses[j].x, houses[j].y)[3][0] + x, houses[j].spacecorners(houses[j].x, houses[j].y)[3][1] - y)])
+
+                # SPACE EXTRA WEGHALEN UIT PLOT
+                print("hello2")
+                count = 0
+                j += 1
+                break
+
+        else:
+            # ALLE KLEINERE SPACES WEGHALEN UIT PLOT
+            count += 1  # X EN Y UIT SPACELIST KUNNEN BUITEN BOUNDERIES GAAN
+            print("hoi2")
+            print(j)
+
+
+
+
 PlotHouses()
