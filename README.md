@@ -1,6 +1,6 @@
 # Heuristieken Fall 2017: AmstelHaege
 
-This program offers the possibility to plot a map with three housevariants (20 houses, 40 houses, 60 houses) at the request of the municipality for the new district Amstelhaege. The value of a map is the sum of all houses in the neighborhood including the number of meters of freespace per house. Thereby an attempt is made to realize a maximum value and a maximum free standing. Surface water is also added and there are three different houses, namely single-family homes, bungalows and maisonettes.
+This program offers the possibility to plot a map with three housevariants (20 houses, 40 houses, 60 houses) at the request of the municipality for the new district Amstelhaege. The value of a map is the sum of all houses in the neighborhood including the number of meters of free standing per house. Thereby an attempt is made to realize a maximum value and a maximum free standing. Surface water is also added and there are three different houses, namely single-family homes, bungalows and maisonettes.
 
 ## Getting Started
 
@@ -54,10 +54,14 @@ $ pip install numpy
 
 # Install matplotlib
 $ pip install matplotlib
+```
+To install shapely, do the following:
 
-# Install shapely
-# [link to Shapeley WHL files](https://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely)
-# Set the right file in the right workspace
+Click on the link below and download the right WHL file
+[link to Shapeley WHL files](https://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely)
+Set the right file in the right workspace, after that:
+```
+$ pip install shapely
 ```
 
 ## Deployment
