@@ -58,7 +58,9 @@ $ pip install matplotlib
 To install shapely, do the following:
 
 Click on the link below and download the right WHL file
+
 [link to Shapeley WHL files](https://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely)
+
 Set the right file in the right workspace, after that:
 ```
 $ pip install shapely
