@@ -4,27 +4,7 @@ This program offers the possibility to plot a map with three housevariants (20 h
 
 ## Getting Started
 
-
-
-## Constraints
-
-1. The district is placed on a piece of land of 160x180 meters.
-
-2. The number of homes in the neighborhood consists of 60% single-family homes, 25% of bungalows and 15% of maisonettes. In other words, with the 20-house variant there are 12 single-family homes, 5 bungalows and 3 maisons.
-
-3. A single-family home is 8x8 meters (width x length) and has a value of € 285,000. The home has a minimum free standing of two meters; every meter extra provides a price improvement of 3% with respect to the original starting value (not cumulative).
-
-4. A bungalow is 10x7.5 meters (width x length) and has a value of € 399,000. The home has a minimum free standing of three meters; every meter extra provides a price improvement of 4% with respect to the original starting value (not cumulative).
-
-5. A Maison is 11x10.5 meters (width x length) and has a value of € 610,000. The home has a minimum free standing of six meters; every meter extra provides a price improvement of 6% with respect to the original starting value (not cumulative).
-
-6. The free standing of a house is the smallest distance to the nearest other house in the neighborhood. In other words, for a free standing of 6 meters, all other houses in the neighborhood are at least 6 meters away. This distance is defined as the shortest distance between two walls and is therefore not calculated from the center of the house.
-
-7. The compulsory free standing for every home falls within the map.
-
-8. The percent value increase per property per meter is not cumulative. The percentage is always calculated with regard to the starting price of the house.
-
-9. The district contains 20% surface water, divided into no more than four sections that are rectangular or oval in shape. The aspect ratios are between 1 and 4.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
 
 ### Prerequisites
 
@@ -66,10 +46,6 @@ Set the right file in the right workspace, after that:
 $ pip install shapely
 ```
 
-## Deployment
-
-
-
 ## Running the tests
 
 Type in the terminal in the correct folder where this file is stored:
@@ -85,6 +61,32 @@ $ Ctrl C
 $ Command C
 ```
 
+## The Program
+
+### Constraints
+
+1. The district is placed on a piece of land of 160x180 meters.
+
+2. The number of homes in the neighborhood consists of 60% single-family homes, 25% of bungalows and 15% of maisonettes. In other words, with the 20-house variant there are 12 single-family homes, 5 bungalows and 3 maisons.
+
+3. A single-family home is 8x8 meters (width x length) and has a value of € 285,000. The home has a minimum free standing of two meters; every meter extra provides a price improvement of 3% with respect to the original starting value (not cumulative).
+
+4. A bungalow is 10x7.5 meters (width x length) and has a value of € 399,000. The home has a minimum free standing of three meters; every meter extra provides a price improvement of 4% with respect to the original starting value (not cumulative).
+
+5. A Maison is 11x10.5 meters (width x length) and has a value of € 610,000. The home has a minimum free standing of six meters; every meter extra provides a price improvement of 6% with respect to the original starting value (not cumulative).
+
+6. The free standing of a house is the smallest distance to the nearest other house in the neighborhood. In other words, for a free standing of 6 meters, all other houses in the neighborhood are at least 6 meters away. This distance is defined as the shortest distance between two walls and is therefore not calculated from the center of the house.
+
+7. The compulsory free standing for every home falls within the map.
+
+8. The percent value increase per property per meter is not cumulative. The percentage is always calculated with regard to the starting price of the house.
+
+9. The district contains 20% surface water, divided into no more than four sections that are rectangular or oval in shape. The aspect ratios are between 1 and 4.
+
+## Versioning
+
+For the versions available, see the [commits on this repository](https://github.com/nathaliejborst/Amstelsquad/commits/master). 
+
 ## Authors
 
 * **Nathalie Borst** - [nathaliejborst](https://github.com/nathaliejborst)
@@ -94,3 +96,6 @@ $ Command C
 
 See also the list of [contributors](https://github.com/nathaliejborst/Amstelsquad/graphs/contributors) who participated in this project.
 
+## License
+
+This project is licensed under the University of Amsterdam, minor programming, programming theory/heuristics
