@@ -4,7 +4,7 @@ This program offers the possibility to plot a map with three housevariants (20 h
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+
 
 ## Constraints
 
@@ -57,7 +57,7 @@ $ pip install matplotlib
 ```
 To install shapely, do the following:
 
-Click on the link below and download the right WHL file
+(Ctrl + )Click on the link below and download the right WHL file
 
 [link to Shapeley WHL files](https://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely)
 
@@ -68,7 +68,7 @@ $ pip install shapely
 
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+
 
 ## Running the tests
 
@@ -87,6 +87,10 @@ $ Command C
 
 ## Authors
 
-* **Nathalie Borst**
-* **Dennis Broekhuizen**
-* **Bob Hamelers**
+* **Nathalie Borst** - [nathaliejborst](https://github.com/nathaliejborst)
+* **Dennis Broekhuizen** - [DennisBroekhuizen](https://github.com/DennisBroekhuizen)
+* **Bob Hamelers** - [bobhamelers](https://github.com/bobhamelers)
+* **Bart van Baal** - [BartvBaal](https://github.com/BartvBaal)
+
+See also the list of [contributors](https://github.com/nathaliejborst/Amstelsquad/graphs/contributors) who participated in this project.
+
