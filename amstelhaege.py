@@ -40,8 +40,9 @@ class House:
                 upperLeft = [x - self.freespace, (y + self.height + self.freespace)]
                 upperRight = [(x + self.width + self.freespace), (y + self.height + self.freespace)]
                 bottomRight = [(x + self.width + self.freespace), y - self.freespace]
-                return {'bottomLeft': bottomLeft, 'upperLeft': upperLeft,
-                        'upperRight': upperRight, 'bottomRight': bottomRight}
+                return [bottomLeft, bottomRight, upperRight, upperLeft]
+                # return {'bottomLeft': bottomLeft, 'upperLeft': upperLeft,
+                #         'upperRight': upperRight, 'bottomRight': bottomRight}
 
     def addFreespace(self, meter):
         self.meter = meter
@@ -130,11 +131,7 @@ def checkIntersection(coordinatesList, spaceList, x, y, houseType, i, newHouse, 
                      coordinatesList[j]["upperLeft"][1]),
                      (coordinatesList[j]["bottomLeft"][0],
                      coordinatesList[j]["bottomLeft"][1])])
-        s1 = Polygon([(x - houseType.freespace, y - houseType.freespace),
-                     (x + houseType.width + houseType.freespace, y - houseType.freespace),
-                     (x + houseType.width + houseType.freespace, y + houseType.height + houseType.freespace),
-                     (x - houseType.freespace, y + houseType.height + houseType.freespace),
-                     (x - houseType.freespace, y - houseType.freespace)])
+        s1 = Polygon(houseType.spacecorners(houseType.x, houseType.y))
         s2 = Polygon([(spaceList[j]["bottomLeft"][0],
                      spaceList[j]["bottomLeft"][1]),
                      (spaceList[j]["bottomRight"][0],
@@ -263,8 +260,8 @@ calculate()
 # print(coordinatesList)
 # print(spaceList)
 
-print(houses[2].spacecorners(houses[2].x, houses[2].y));
-print(houses[2].height)
+print(houses[2].corners(houses[2].x, houses[2].y));
+# print(houses[2].height)
 
 # Plot Amstelheage area.
 plt.show()
