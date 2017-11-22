@@ -94,8 +94,9 @@ For the versions available, see the [commits on this repository](https://github.
 * **Bob Hamelers** - [bobhamelers](https://github.com/bobhamelers)
 
 See also the list of [contributors](https://github.com/nathaliejborst/Amstelsquad/graphs/contributors) who participated in this project.
+
 Also thanks to 
-* **Bart van Baal** - [BartvBaal](https://github.com/BartvBaal)
+**Bart van Baal** - [BartvBaal](https://github.com/BartvBaal)
 for assisting us. 
 
 ## License
