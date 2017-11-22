@@ -68,6 +68,7 @@ $ Command C
 On a grid of 156 by 176 gives 27.456 'blocks' can be placed somewhere. In reality, the plotting of houses is lower since this number applies to the smallest house. Next to that, no account is taken of water and of already placed houses.
 
 The maximum number of possibilities is:
+
 The minimum number of possibilities is:
 
 ### Constraints
