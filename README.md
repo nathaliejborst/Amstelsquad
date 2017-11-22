@@ -92,9 +92,11 @@ For the versions available, see the [commits on this repository](https://github.
 * **Nathalie Borst** - [nathaliejborst](https://github.com/nathaliejborst)
 * **Dennis Broekhuizen** - [DennisBroekhuizen](https://github.com/DennisBroekhuizen)
 * **Bob Hamelers** - [bobhamelers](https://github.com/bobhamelers)
-* **Bart van Baal** - [BartvBaal](https://github.com/BartvBaal)
 
 See also the list of [contributors](https://github.com/nathaliejborst/Amstelsquad/graphs/contributors) who participated in this project.
+Also thanks to 
+* **Bart van Baal** - [BartvBaal](https://github.com/BartvBaal)
+for assisting us. 
 
 ## License
 
