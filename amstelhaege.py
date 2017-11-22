@@ -9,13 +9,13 @@ import matplotlib.patches as patches
 from shapely.geometry import Polygon
 
 # Fixing random state for reproducibility
-# np.random.seed(0)
+np.random.seed(0)
 
 
 # Declare elements of house in class.
 class House:
 
-    def __init__(self, width, height, freespace, value, valueUpdate, x=0, y=0):
+    def __init__(self, width, height, freespace, value, valueUpdate, x=0, y=0, color=None):
         self.width = width
         self.height = height
         self.freespace = freespace
@@ -23,6 +23,7 @@ class House:
         self.valueUpdate = valueUpdate
         self.x = x
         self.y = y
+        self.color = color
 
     def area(self):
         return self.width * self.height
@@ -32,17 +33,14 @@ class House:
         upperLeft = [x, (y + self.height)]
         upperRight = [(x + self.width), (y + self.height)]
         bottomRight = [(x + self.width), y]
-        return {'bottomLeft': bottomLeft, 'upperLeft': upperLeft,
-                'upperRight': upperRight, 'bottomRight': bottomRight}
+        return [bottomLeft, upperLeft, upperRight, bottomRight]
 
     def spacecorners(self, x, y):
                 bottomLeft = [x - self.freespace, y - self.freespace]
                 upperLeft = [x - self.freespace, (y + self.height + self.freespace)]
                 upperRight = [(x + self.width + self.freespace), (y + self.height + self.freespace)]
                 bottomRight = [(x + self.width + self.freespace), y - self.freespace]
-                return [bottomLeft, bottomRight, upperRight, upperLeft]
-                # return {'bottomLeft': bottomLeft, 'upperLeft': upperLeft,
-                #         'upperRight': upperRight, 'bottomRight': bottomRight}
+                return [bottomLeft, upperLeft, upperRight, bottomRight]
 
     def addFreespace(self, meter):
         self.meter = meter
@@ -56,32 +54,9 @@ class House:
     def totalHeight(self):
         return self.height + self.freespace * 2
 
+
 # List of every house placed on the grid
 houses = []
-
-
-# Start of creating a class for the grid (doesn't do anything yet)
-class Grid:
-
-    def __init__(self, bottomRight, bottomLeft, upperLeft, upperRight):
-        self.bottomRight = bottomRight
-        self.bottomLeft = bottomLeft
-        self.upperLeft = upperLeft
-        self.upperRight = upperRight
-
-
-# Declaration of different housetypes.
-maison = House(width=11, height=10.5, freespace=6, value=610000,
-               valueUpdate=1.06)
-
-bungalow = House(width=10, height=7.5, freespace=3, value=399000,
-                 valueUpdate=1.04)
-
-familyHouse = House(width=8, height=8, freespace=2, value=285000,
-                    valueUpdate=1.03)
-
-water = House(width=144, height=40, freespace=0, value=0, valueUpdate=0)
-
 
 # Declare restrictions for Amstelheage area.
 areaWidth = 180
@@ -94,174 +69,149 @@ area.set_title('Amstelhaege')
 
 # Declare possible area variants by setting matching amount of housetypes
 # Choose area variant by changing areaVariant to 1, 2 or 3.
-areaVariant = 1
+areaVariant = 3
 amountOWater = 0
 amountOfMaisons = 3 * areaVariant
 amountOfBungalows = 5 * areaVariant
 amountOfFamilyHouses = 12 * areaVariant
 
-coordinatesList = []
-spaceList = []
 
-def checkIntersection(coordinatesList, spaceList, x, y, houseType, i, newHouse, space, count):
-
-    # Add minimum coordinates to class
-    houseType.x = x
-    houseType.y = y
-
-    # get corners of house
-    corners = houseType.corners(x, y)
-    # Acces coordinates by using the House class instead of the coordinates list
-    # print(houseType.corners(x, y)['bottomLeft'][0])
-    # print(houseType.spacecorners(x, y)['bottomLeft'][0])
+# Returns true if two houses intersect.
+def Intersect(p1, p2, s1, s2):
+    if p1.intersects(p2) is True or p1.intersects(s2) is True or s1.intersects(p2) is True:
+        return True
+    else:
+        return False
 
 
-        # Checks if new house intersects with consisting houses.
-    for j in range(len(coordinatesList)):
-        p1 = Polygon([(x, y), (x + houseType.width, y),
-                     (x + houseType.width, y + houseType.height),
-                     (x, y + houseType.height), (x, y)])
-        p2 = Polygon([(coordinatesList[j]["bottomLeft"][0],
-                     coordinatesList[j]["bottomLeft"][1]),
-                     (coordinatesList[j]["bottomRight"][0],
-                     coordinatesList[j]["bottomRight"][1]),
-                     (coordinatesList[j]["upperRight"][0],
-                     coordinatesList[j]["upperRight"][1]),
-                     (coordinatesList[j]["upperLeft"][0],
-                     coordinatesList[j]["upperLeft"][1]),
-                     (coordinatesList[j]["bottomLeft"][0],
-                     coordinatesList[j]["bottomLeft"][1])])
-        s1 = Polygon(houseType.spacecorners(houseType.x, houseType.y))
-        s2 = Polygon([(spaceList[j]["bottomLeft"][0],
-                     spaceList[j]["bottomLeft"][1]),
-                     (spaceList[j]["bottomRight"][0],
-                     spaceList[j]["bottomRight"][1]),
-                     (spaceList[j]["upperRight"][0],
-                     spaceList[j]["upperRight"][1]),
-                     (spaceList[j]["upperLeft"][0],
-                     spaceList[j]["upperLeft"][1]),
-                     (spaceList[j]["bottomLeft"][0],
-                     spaceList[j]["bottomLeft"][1])])
-        if p1.intersects(p2) is True or p1.intersects(s2) is True or s1.intersects(p2) is True:
-                count += 1
-                # print(newHouse)
-                newHouse.remove()
-                space.remove()
-                i -= 1
-                break
-    i += 1
+def placeFirstHouse(houseType):
+    houseType.x = houseType.freespace
+    houseType.y = houseType.freespace
 
-    # Create list of all coordinates of houses
     houses.append(houseType)
-    coordinatesList.append(houseType.corners(x, y))
-    spaceList.append(houseType.spacecorners(x, y))
-
-    # print(coordinatesList[len(coordinatesList) - 1]["bottomLeft"][0])
-    return (i, houseType)
 
 
+def placeHouse(houseType):
 
+    # Declare true at first, because it has to place a house.
+    intersect = True
 
+    # Keeps trying to place a house until it does not intersect with another house anymore.
+    while intersect is True:
 
-# Plots the houses per type of house.
-def plotHouses(amountOfHouses, houseType, color):
-    i = 0
-    count = 0
-    while i < amountOfHouses:
-        # Choose random x and y coordinates.
-        x = np.random.randint(low=houseType.freespace, high=areaWidth -
+        # Generate random x and y bottom corner coordinates.
+        houseType.x = np.random.randint(low=houseType.freespace, high=areaWidth -
                               houseType.freespace - houseType.width)
 
-        y = np.random.randint(low=houseType.freespace,
+        houseType.y = np.random.randint(low=houseType.freespace,
                               high=areaHeight - houseType.freespace -
                               houseType.height)
 
-        # Add bungalow to area.
-        newHouse = area.add_patch(patches.Rectangle((x, y),
-                                                    width=houseType.width,
-                                                    height=houseType.height,
-                                                    angle=0.0, linewidth=1,
-                                                    edgecolor="black",
-                                                    facecolor=color))
+        # Declare corners and free space corners for house to be placed.
+        p1 = Polygon(houseType.corners(houseType.x, houseType.y))
+        s1 = Polygon(houseType.spacecorners(houseType.x, houseType.y))
 
-        # Add freespace around bungalow.
-        space = area.add_patch(patches.FancyBboxPatch((x - houseType.freespace,
-                                                      y - houseType.freespace),
-                                                      width=houseType.totalWidth(),
-                                                      height=houseType.totalHeight(),
-                                                      boxstyle='round, pad=0,\
-                                                      rounding_size={}'.format(houseType.freespace),
-                                                      edgecolor='black',
-                                                      fill=False))
+        for j in range(len(houses)):
+            p2 = Polygon(houses[j].corners(houses[j].x, houses[j].y))
+            s2 = Polygon(houses[j].spacecorners(houses[j].x, houses[j].y))
 
-        i, houseType = checkIntersection(coordinatesList, spaceList, x, y, houseType, i, newHouse, space, count)
+            # Check if house intersects.
+            intersect = Intersect(p1, p2, s1, s2)
+
+            if intersect is True:
+                break
+    if intersect is False:
+        # Add placed house to list of houses.
+        houses.append(houseType)
+
+placeFirstHouse(House(width=11, height=10.5, freespace=6, value=610000, valueUpdate=1.06))
+
+# Place water
+water = House(width=144, height=40, freespace=0, value=0, valueUpdate=0, color='blue')
+placeHouse(water)
+
+# Place maisons
+for maisons in range(amountOfMaisons):
+    maison = House(width=11, height=10.5, freespace=6, value=610000, valueUpdate=1.06, color='red')
+    placeHouse(maison)
+
+# Place bungalows
+for bungalows in range(amountOfBungalows):
+    bungalow = House(width=10, height=7.5, freespace=3, value=399000, valueUpdate=1.04, color='orange')
+    placeHouse(bungalow)
+
+# Place familyhouses
+for familyHouses in range(amountOfFamilyHouses):
+    familyHouse = House(width=8, height=8, freespace=2, value=285000,
+                        valueUpdate=1.03, color='yellow')
+    placeHouse(familyHouse)
+
+valueTotal = 0
+
+# Plots and prints grid.
 
 
-def calculate():
+def PlotHouses(valueTotal):
+    for z in range(len(houses)):
+        area.add_patch(plt.Polygon(houses[z].corners(houses[z].x, houses[z].y), color = houses[z].color))
+        area.add_patch(plt.Polygon(houses[z].spacecorners(houses[z].x, houses[z].y), fill=False))
+
+        # Print coordinates list
+        print(houses[z].corners(houses[z].x, houses[z].y))
+        print(houses[z].spacecorners(houses[z].x, houses[z].y))
+
+        # Calculate total value.
+        valueTotal += houses[z].value
+        print(valueTotal)
+    plt.show()
+
+
+def Calculate():
     count = 0
-    for j in range(len(spaceList)):
+    j = 0
+    while j < (len(houses)):
+        print("hoi1")
+        print(j)
         x = 1 + count
         y = 1 + count
 
-        s1 = Polygon([(spaceList[j]["bottomLeft"][0] - x,
-                       spaceList[j]["bottomLeft"][1] - y),
-                      (spaceList[j]["bottomRight"][0] + x,
-                       spaceList[j]["bottomRight"][1] - y),
-                      (spaceList[j]["upperRight"][0] + x,
-                       spaceList[j]["upperRight"][1] + y),
-                      (spaceList[j]["upperLeft"][0] - x,
-                       spaceList[j]["upperLeft"][1] + y),
-                      (spaceList[j]["bottomLeft"][0] - x,
-                       spaceList[j]["bottomLeft"][1] - y)])
+        s1 = Polygon([(houses[j].spacecorners(houses[j].x, houses[j].y)[0][0] - x, houses[j].spacecorners(houses[j].x, houses[j].y)[0][1] - y),
+        (houses[j].spacecorners(houses[j].x, houses[j].y)[1][0] + x, houses[j].spacecorners(houses[j].x, houses[j].y)[1][1] - y),
+        (houses[j].spacecorners(houses[j].x, houses[j].y)[2][0] + x, houses[j].spacecorners(houses[j].x, houses[j].y)[2][1] + y),
+        (houses[j].spacecorners(houses[j].x, houses[j].y)[3][0] - x, houses[j].spacecorners(houses[j].x, houses[j].y)[3][1] + y)])
 
+        print(s1)
         # NIEUWE EXTRA SPACE PLOTTEN
 
-        for k in range(len(coordinatesList)):
-            p1 = Polygon([(coordinatesList[k]["bottomLeft"][0],
-                         coordinatesList[k]["bottomLeft"][1]),
-                         (coordinatesList[k]["bottomRight"][0],
-                         coordinatesList[k]["bottomRight"][1]),
-                         (coordinatesList[k]["upperRight"][0],
-                         coordinatesList[k]["upperRight"][1]),
-                         (coordinatesList[k]["upperLeft"][0],
-                         coordinatesList[k]["upperLeft"][1]),
-                         (coordinatesList[k]["bottomLeft"][0],
-                         coordinatesList[k]["bottomLeft"][1])])
+        for k in range(len(houses)):
+            p1 = Polygon([(houses[k].corners(houses[k].x, houses[k].y)[0][0], houses[k].corners(houses[k].x, houses[k].y)[0][1]),
+            (houses[k].corners(houses[k].x, houses[k].y)[1][0], houses[k].corners(houses[k].x, houses[k].y)[1][1]),
+            (houses[k].corners(houses[k].x, houses[k].y)[2][0], houses[k].corners(houses[k].x, houses[k].y)[2][1]),
+            (houses[k].corners(houses[k].x, houses[k].y)[3][0], houses[k].corners(houses[k].x, houses[k].y)[3][1])])
+
+            # print("hello1")
 
             if s1.touches(p1) is True:
 
-                s1 = Polygon([(spaceList[j]["bottomLeft"][0] + x,
-                               spaceList[j]["bottomLeft"][1] + y),
-                              (spaceList[j]["bottomRight"][0] - x,
-                               spaceList[j]["bottomRight"][1] + y),
-                              (spaceList[j]["upperRight"][0] - x,
-                               spaceList[j]["upperRight"][1] - y),
-                              (spaceList[j]["upperLeft"][0] + x,
-                               spaceList[j]["upperLeft"][1] - y),
-                              (spaceList[j]["bottomLeft"][0] + x,
-                               spaceList[j]["bottomLeft"][1] + y)])
+                s1 = Polygon([(houses[j].spacecorners(houses[j].x, houses[j].y)[0][0] + x, houses[j].spacecorners(houses[j].x, houses[j].y)[0][1] + y),
+                        (houses[j].spacecorners(houses[j].x, houses[j].y)[1][0] - x, houses[j].spacecorners(houses[j].x, houses[j].y)[1][1] + y),
+                        (houses[j].spacecorners(houses[j].x, houses[j].y)[2][0] - x, houses[j].spacecorners(houses[j].x, houses[j].y)[2][1] - y),
+                        (houses[j].spacecorners(houses[j].x, houses[j].y)[3][0] + x, houses[j].spacecorners(houses[j].x, houses[j].y)[3][1] - y)])
 
                 # SPACE EXTRA WEGHALEN UIT PLOT
-
+                print("hello2")
                 count = 0
+                j += 1
                 break
 
-        # ALLE KLEINERE SPACES WEGHALEN UIT PLOT
-        count += 1  # X EN Y UIT SPACELIST KUNNEN BUITEN BOUNDERIES GAAN OF CHECKT touches DAAR OOK OP?
-        j -= 1  # J KAN ONDER 0 KOMEN
+        else:
+            # ALLE KLEINERE SPACES WEGHALEN UIT PLOT
+            count += 1  # X EN Y UIT SPACELIST KUNNEN BUITEN BOUNDERIES GAAN
+            print("hoi2")
+            print(j)
 
 
-plotHouses(amountOWater, water, "blue")
-plotHouses(amountOfMaisons, maison, "red")
-plotHouses(amountOfBungalows, bungalow, "orange")
-plotHouses(amountOfFamilyHouses, familyHouse, "yellow")
-calculate()
-
-# print(coordinatesList)
-# print(spaceList)
-
-print(houses[2].corners(houses[2].x, houses[2].y));
-# print(houses[2].height)
-
-# Plot Amstelheage area.
-plt.show()
+PlotHouses(valueTotal)
+# Calculate()
+# print("hello")
+# PlotHouses(valueTotal)
