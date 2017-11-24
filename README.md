@@ -65,11 +65,23 @@ $ Command C
 
 ### State-Space
 
-On a grid of 156 by 176 gives 27.456 'blocks' can be placed somewhere. In reality, the plotting of houses is lower since this number applies to the smallest house. Next to that, no account is taken of water and of already placed houses.
+On a grid of 156 by 176 gives 27.456 'blocks' can be placed somewhere. In reality, the plotting of houses is lower since this number applies to the smallest house. Next to that, no account is taken of water and of already placed houses. The State-space is as maximum 27.456 per house. 
 
-The maximum number of possibilities is:
+The maximum value is: 36 * 285.000 + 15 * 399.000 + 9 * 610.000 = 10.260.000 + 5.985.000 + 5.490.000 = 21.735.000
 
-The minimum number of possibilities is:
+The space already taken from the grid (180*160= 28.800 ) = 36*(10*10) + 15*(13*10,5) + 9*(17*16,5) = 3600 + 2047,5 + 2524,5 = 8172 + water (160*180*0,2=5760) = 13.932. Total grid minus already taken space = 28.800 - 13.932 = 14.868 is available for freespace. 
+
+Freespace could overlap max 4 times, so 4 times the most expensive freespace. 4 * (610.000 * 0.06) =  4 * 36.600 = 146.400 / 34,5 = 4.243,48~ per square meter (this number is only true by the first extra meter of a maison).  
+
+4.243,48 * 14.868 = 63.092.034,8
+
+21.735.000 + 63.092.034,8 = 84.827.034,8~
+
+84.827.034,8~ is an estimate of the absolute maximum of the value of Amstelhaege. 
+
+
+
+The minimum value is: 12 * 285.000 + 5 * 399.000 + 3 * 610.000 = 3.420.000 + 1.995.000 + 1.830.000 = 7.245.000 euro
 
 ### Constraints
 
