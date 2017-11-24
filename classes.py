@@ -1,7 +1,7 @@
 class Grid:
-    def __init__(self, housesList = []):
+    def __init__(self, housesList = [], teslist = [], x=0):
         self.housesList = housesList
-
+        
     def totalValue(self, housesList):
         value = 0
         for house in housesList:
