@@ -210,7 +210,6 @@ for h in range(len(houses)):
     # Add list of distance to other houses to class instance
     houses[h].distanceToOthers = GetDistance(h)
 
-
     # Get minimum distance and nr of that house in the houses[]-list
     minimumDistance, position = getMinimum(houses[h].distanceToOthers)
     decimalPointsOfMinimum = str(minimumDistance)[::-1].find('.')
@@ -224,15 +223,54 @@ for h in range(len(houses)):
         distance_x = straightDistance(houses[h].Xmin(houses[h].x), houses[h].Xmax(houses[h].x), houses[position].Xmin(houses[position].x), houses[position].Xmax(houses[position].x))
         distance_y = straightDistance(houses[h].Ymin(houses[h].x), houses[h].Ymax(houses[h].x), houses[position].Ymin(houses[position].x), houses[position].Ymax(houses[position].x))
 
+        # dishx = houses[h].distanceToOthers[position]['x']
+        # dishy = houses[h].distanceToOthers[position]['y']
+
         # take the smallest distance as largest possible freespace
         if houses[h].distanceToOthers[position]['x'] < houses[h].distanceToOthers[position]['y']:
             houses[h].extraFreespace = houses[h].distanceToOthers[position]['y']
-
         else:
             houses[h].extraFreespace = houses[h].distanceToOthers[position]['x']
-
     else:
         houses[h].extraFreespace = minimumDistance
+
+# Below fuction that doesn't plot outside the field. (instead of rule above here until comment that start with take)
+    #
+    #     if houses[h].distanceToOthers[position]['x'] < houses[h].distanceToOthers[position]['y']:
+    #         if (houses[h].Ymin(houses[h].y) - houses[h].freespace - houses[h].distanceToOthers[position]['y']) < 0:
+    #             houses[h].extraFreespace = houses[h].Ymin(houses[h].y)
+    #             print("hello1")
+    #         elif (houses[h].Ymax(houses[h].y) + houses[h].freespace + houses[h].distanceToOthers[position]['y']) > 160:
+    #             houses[h].extraFreespace = 160 - (houses[h].Ymax(houses[h].y))
+    #             print("hello2")
+    #         else:
+    #             houses[h].extraFreespace = houses[h].distanceToOthers[position]['y']
+    #
+    #     else:
+    #         if (houses[h].Xmin(houses[h].x) - houses[h].freespace - houses[h].distanceToOthers[position]['x']) < 0:
+    #             houses[h].extraFreespace = houses[h].Xmin(houses[h].x)
+    #             print("hello3")
+    #         elif (houses[h].Xmax(houses[h].x) + houses[h].freespace + houses[h].distanceToOthers[position]['x']) > 180:
+    #             houses[h].extraFreespace = 180 - (houses[h].Xmax(houses[h].x))
+    #             print("hello4")
+    #         else:
+    #             houses[h].extraFreespace = houses[h].distanceToOthers[position]['x']
+    #
+    # else:
+    #     if (houses[h].Ymin(houses[h].y) - houses[h].freespace - minimumDistance) < 0:
+    #         houses[h].extraFreespace = houses[h].Ymin(houses[h].y)
+    #         print("Hello1")
+    #     elif (houses[h].Ymax(houses[h].y) + houses[h].freespace + minimumDistance) > 160:
+    #         houses[h].extraFreespace = 160 - (houses[h].Ymax(houses[h].y))
+    #         print("Hello2")
+    #     elif (houses[h].Xmin(houses[h].x) - houses[h].freespace - minimumDistance) < 0:
+    #         houses[h].extraFreespace = houses[h].Xmin(houses[h].x)
+    #         print("Hello3")
+    #     elif (houses[h].Xmax(houses[h].x) + houses[h].freespace + minimumDistance) > 180:
+    #         houses[h].extraFreespace = 180 - (houses[h].Xmax(houses[h].x))
+    #         print("Hello4")
+    #     else:
+    #         houses[h].extraFreespace = minimumDistance
 
 
 print("Total value: {}".format(round(grid.totalValue(grid.housesList), 2)))
