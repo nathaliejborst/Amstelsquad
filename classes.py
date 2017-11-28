@@ -1,7 +1,7 @@
 class Grid:
     def __init__(self, housesList = [], teslist = [], x=0):
         self.housesList = housesList
-        
+
     def totalValue(self, housesList):
         value = 0
         for house in housesList:
@@ -50,12 +50,11 @@ class House:
         return [bottomLeft, upperLeft, upperRight, bottomRight]
 
     def extraFreeSpaceCorners(self, x, y):
-        bottomLeft = [x - self.freespace - self.extraFreespace, y - self.freespace - self.extraFreespace]
-        upperLeft = [x - self.freespace  - self.extraFreespace, (y + self.height + self.freespace + self.extraFreespace)]
-        upperRight = [(x + self.width + self.freespace + self.extraFreespace), (y + self.height + self.freespace + self.extraFreespace)]
-        bottomRight = [(x + self.width + self.freespace + self.extraFreespace), y - self.freespace  - self.extraFreespace]
+        bottomLeft = [x - self.extraFreespace, y - self.extraFreespace]
+        upperLeft = [x - self.extraFreespace, (y + self.height + self.extraFreespace)]
+        upperRight = [(x + self.width + self.extraFreespace), (y + self.height + self.extraFreespace)]
+        bottomRight = [(x + self.width +  self.extraFreespace), y - self.extraFreespace]
         return [bottomLeft, upperLeft, upperRight, bottomRight]
-
 
     def addFreespace(self, meter):
         self.meter = meter
