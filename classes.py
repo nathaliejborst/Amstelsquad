@@ -1,13 +1,15 @@
 class Grid:
-    def __init__(self, housesList = [], teslist = [], x=0):
+    def __init__(self, housesList = []):
         self.housesList = housesList
+        self.areaWidth = 180
+        self.areaHeight = 160
 
     def totalValue(self, housesList):
         value = 0
         for house in housesList:
             value += house.value
             value += (house.extraFreespace - house.freespace) * house.valueUpdate * house.value
-            return value
+        return value
 
 # Declare elements of house in class.
 class House:
@@ -50,10 +52,31 @@ class House:
         return [bottomLeft, upperLeft, upperRight, bottomRight]
 
     def extraFreeSpaceCorners(self, x, y):
-        bottomLeft = [x - self.extraFreespace, y - self.extraFreespace]
-        upperLeft = [x - self.extraFreespace, (y + self.height + self.extraFreespace)]
-        upperRight = [(x + self.width + self.extraFreespace), (y + self.height + self.extraFreespace)]
-        bottomRight = [(x + self.width +  self.extraFreespace), y - self.extraFreespace]
+        # Adjusts freespace if the bottom side of the freespace crosses the left border of the grid (x < 0).
+        if x - self.extraFreespace < 0:
+            self.extraFreespace = x
+        # CAdjusts freespace if the right side of the freespace crosses the right border of the grid (x > 180).
+        if x + self.width +  self.extraFreespace > 180:
+            self.extraFreespace = 180 - x - self.width
+        # Adjusts freespace if the left side of the freespace crosses the bottom of the grid (y < 0).
+        if y - self.extraFreespace < 0:
+            self.extraFreespace = y
+        # Adjusts freespace if the top side of the freespace crosses the bottom border of the grid (y > 160).
+        if y + self.height + self.extraFreespace > 160:
+            self.extraFreespace = 160 - y - self.height
+
+        # Adjust corners of freespace to the new value because of the limitations of the border of the grid.
+        leftX = x - self.extraFreespace
+        rightX = x + self.width + self.extraFreespace
+        bottomY = y - self.extraFreespace
+        upperY = y + self.height + self.extraFreespace
+
+        # Initialize arrays of corner coordinates.
+        bottomLeft = [leftX, bottomY]
+        upperLeft = [leftX, upperY]
+        upperRight = [rightX, upperY]
+        bottomRight = [rightX, bottomY]
+
         return [bottomLeft, upperLeft, upperRight, bottomRight]
 
     def addFreespace(self, meter):

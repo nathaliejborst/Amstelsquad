@@ -93,7 +93,7 @@ def placeHouse(houseType):
 
 
 placeFirstMaison(cl.House(width=11, height=10.5, freespace=6, value=610000,
-           valueUpdate=1.06))
+           valueUpdate=0.06))
 
 # Place water
 water = cl.House(width=144, height=40, freespace=0, value=0, valueUpdate=0, color='blue')
@@ -118,13 +118,12 @@ for familyHouses in range(amountOfFamilyHouses):
     placeHouse(familyHouse)
 
 grid = cl.Grid(houses)
-valueTotal = 0
 
 # Plots and prints grid.
 def PlotHouses():
     for house in houses:
         area.add_patch(plt.Polygon(house.corners(house.x, house.y), color=house.color))
-        area.add_patch(plt.Polygon(house.spacecorners(house.x, house.y), fill=False))
+        # area.add_patch(plt.Polygon(house.spacecorners(house.x, house.y), fill=False))
         area.add_patch(plt.Polygon(house.extraFreeSpaceCorners(house.x, house.y), fill=False, edgecolor='green'))
 
     plt.show()
@@ -216,16 +215,6 @@ for h in range(len(houses)):
 
     # If minimum has more than 2 decimalpoints, then distance if calculated using Pythagoras
     if (decimalPointsOfMinimum > 2):
-
-        houses[h].distanceToOthers[position]['x']
-
-        # Get straight distance on x-axis and y-axis
-        distance_x = straightDistance(houses[h].Xmin(houses[h].x), houses[h].Xmax(houses[h].x), houses[position].Xmin(houses[position].x), houses[position].Xmax(houses[position].x))
-        distance_y = straightDistance(houses[h].Ymin(houses[h].x), houses[h].Ymax(houses[h].x), houses[position].Ymin(houses[position].x), houses[position].Ymax(houses[position].x))
-
-        # dishx = houses[h].distanceToOthers[position]['x']
-        # dishy = houses[h].distanceToOthers[position]['y']
-
         # take the smallest distance as largest possible freespace
         if houses[h].distanceToOthers[position]['x'] < houses[h].distanceToOthers[position]['y']:
             houses[h].extraFreespace = houses[h].distanceToOthers[position]['y']
@@ -235,7 +224,8 @@ for h in range(len(houses)):
         houses[h].extraFreespace = minimumDistance
 
 # Below fuction that doesn't plot outside the field. (instead of rule above here until comment that start with take)
-    #
+
+        # Checks if the y distance is bigger than de x distance, if so set the y distance as freespace
     #     if houses[h].distanceToOthers[position]['x'] < houses[h].distanceToOthers[position]['y']:
     #         if (houses[h].Ymin(houses[h].y) - houses[h].freespace - houses[h].distanceToOthers[position]['y']) < 0:
     #             houses[h].extraFreespace = houses[h].Ymin(houses[h].y)
@@ -246,6 +236,7 @@ for h in range(len(houses)):
     #         else:
     #             houses[h].extraFreespace = houses[h].distanceToOthers[position]['y']
     #
+    #     # Sets the x distance as freespace, because it's bigger than the y distance
     #     else:
     #         if (houses[h].Xmin(houses[h].x) - houses[h].freespace - houses[h].distanceToOthers[position]['x']) < 0:
     #             houses[h].extraFreespace = houses[h].Xmin(houses[h].x)
