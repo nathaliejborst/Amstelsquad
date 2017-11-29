@@ -11,8 +11,17 @@ from shapely.geometry import Polygon
 import math
 from datetime import datetime
 import visualize as vs
+import csv
 
 startTime = datetime.now()
+
+
+def writeToFile(totalvalue):
+    with open("values.csv", "a") as filewriter:
+        fieldnames = ["value"]
+        writer = csv.DictWriter(filewriter, fieldnames=fieldnames)
+        writer.writerow({"value": totalvalue})
+
 
 # Fixing random state for reproducibility
 # np.random.seed(2)
@@ -220,5 +229,7 @@ print(water.listOfBodies)
 
 print("Total value: {}".format(round(grid.totalValue(grid.housesList), 2)))
 print("Total runtime: {}".format(datetime.now() - startTime))
+
+writeToFile(grid.value)
 
 vs.PlotHouses(grid)
