@@ -10,30 +10,17 @@ import matplotlib.patches as patches
 from shapely.geometry import Polygon
 import math
 from datetime import datetime
+import visualize as vs
 
 startTime = datetime.now()
 
-global areaVariant
-global amountOWater
-global amountOfMaisons
-global amountOfBungalows
-global amountOfFamilyHouses
-
 # Fixing random state for reproducibility
-np.random.seed(3)
-
+# np.random.seed(2)
 
 # List of every house placed on the grid
 houses = []
-
-# Declare restrictions for Amstelheage area.
-areaWidth = 180
-areaHeight = 160
-fig, area = plt.subplots()
-area.set_xlim(xmin=0, xmax=areaWidth)
-area.set_ylim(ymin=0, ymax=areaHeight)
-area.set_aspect('equal', adjustable='box')
-area.set_title('Amstelhaege')
+# Create instance of the grid
+grid = cl.Grid()
 
 # Declare possible area variants by setting matching amount of housetypes
 # Choose area variant by changing areaVariant to 1, 2 or 3.
@@ -65,12 +52,13 @@ def placeHouse(houseType):
     # Keeps trying to place a house until it does not intersect with another house anymore.
     while intersect is True:
 
+
         # Generate random x and y bottom corner coordinates.
-        houseType.x = np.random.randint(low=houseType.freespace, high=areaWidth -
+        houseType.x = np.random.randint(low=houseType.freespace, high=grid.areaWidth -
                               houseType.freespace - houseType.width)
 
         houseType.y = np.random.randint(low=houseType.freespace,
-                              high=areaHeight - houseType.freespace -
+                              high=grid.areaHeight - houseType.freespace -
                               houseType.height)
 
 
@@ -88,7 +76,7 @@ def placeHouse(houseType):
             if intersect is True:
                 break
     if intersect is False:
-    #  Add placed house to list of houses.
+        #  Add placed house to list of houses.
         houses.append(houseType)
 
 
@@ -117,7 +105,8 @@ for familyHouses in range(amountOfFamilyHouses):
                         valueUpdate=0.03, color='yellow')
     placeHouse(familyHouse)
 
-grid = cl.Grid(houses)
+# Add list of houses to grid
+grid.housesList = houses
 
 # Plots and prints grid.
 def PlotHouses():
@@ -149,9 +138,7 @@ def GetDistance(h):
     Ymin_h = houses[h].Ymin(houses[h].y)
     Ymax_h = houses[h].Ymax(houses[h].y)
 
-    i = 0
     for house in houses:
-
         Xmin_i = house.Xmin(house.x)
         Xmax_i = house.Xmax(house.x)
         Ymin_i = house.Ymin(house.y)
@@ -190,8 +177,6 @@ def GetDistance(h):
             dictValues = {'distance': distance, 'x': distance_x, 'y': distance_y}
             distances.append(dictValues)
 
-        i += 1
-
     return distances
 
 def getMinimum(distances = []):
@@ -211,60 +196,29 @@ for h in range(len(houses)):
 
     # Get minimum distance and nr of that house in the houses[]-list
     minimumDistance, position = getMinimum(houses[h].distanceToOthers)
+    # Returns amount of decimalpoints
     decimalPointsOfMinimum = str(minimumDistance)[::-1].find('.')
 
-    # If minimum has more than 2 decimalpoints, then distance if calculated using Pythagoras
-    if (decimalPointsOfMinimum > 2):
-        # take the smallest distance as largest possible freespace
-        if houses[h].distanceToOthers[position]['x'] < houses[h].distanceToOthers[position]['y']:
-            houses[h].extraFreespace = houses[h].distanceToOthers[position]['y']
+    # Makes sure water has no freespace
+    if houses[h].freespace is not 0:
+        # If minimum has more than 2 decimalpoints, then distance if calculated using Pythagoras
+        if (decimalPointsOfMinimum > 2):
+            # take the smallest distance as largest possible freespace
+            if houses[h].distanceToOthers[position]['x'] < houses[h].distanceToOthers[position]['y']:
+                houses[h].extraFreespace = houses[h].distanceToOthers[position]['y']
+            else:
+                houses[h].extraFreespace = houses[h].distanceToOthers[position]['x']
         else:
-            houses[h].extraFreespace = houses[h].distanceToOthers[position]['x']
+            houses[h].extraFreespace = minimumDistance
     else:
-        houses[h].extraFreespace = minimumDistance
+        houses[h].extraFreespace = 0
 
-# Below fuction that doesn't plot outside the field. (instead of rule above here until comment that start with take)
-
-        # Checks if the y distance is bigger than de x distance, if so set the y distance as freespace
-    #     if houses[h].distanceToOthers[position]['x'] < houses[h].distanceToOthers[position]['y']:
-    #         if (houses[h].Ymin(houses[h].y) - houses[h].freespace - houses[h].distanceToOthers[position]['y']) < 0:
-    #             houses[h].extraFreespace = houses[h].Ymin(houses[h].y)
-    #             print("hello1")
-    #         elif (houses[h].Ymax(houses[h].y) + houses[h].freespace + houses[h].distanceToOthers[position]['y']) > 160:
-    #             houses[h].extraFreespace = 160 - (houses[h].Ymax(houses[h].y))
-    #             print("hello2")
-    #         else:
-    #             houses[h].extraFreespace = houses[h].distanceToOthers[position]['y']
-    #
-    #     # Sets the x distance as freespace, because it's bigger than the y distance
-    #     else:
-    #         if (houses[h].Xmin(houses[h].x) - houses[h].freespace - houses[h].distanceToOthers[position]['x']) < 0:
-    #             houses[h].extraFreespace = houses[h].Xmin(houses[h].x)
-    #             print("hello3")
-    #         elif (houses[h].Xmax(houses[h].x) + houses[h].freespace + houses[h].distanceToOthers[position]['x']) > 180:
-    #             houses[h].extraFreespace = 180 - (houses[h].Xmax(houses[h].x))
-    #             print("hello4")
-    #         else:
-    #             houses[h].extraFreespace = houses[h].distanceToOthers[position]['x']
-    #
-    # else:
-    #     if (houses[h].Ymin(houses[h].y) - houses[h].freespace - minimumDistance) < 0:
-    #         houses[h].extraFreespace = houses[h].Ymin(houses[h].y)
-    #         print("Hello1")
-    #     elif (houses[h].Ymax(houses[h].y) + houses[h].freespace + minimumDistance) > 160:
-    #         houses[h].extraFreespace = 160 - (houses[h].Ymax(houses[h].y))
-    #         print("Hello2")
-    #     elif (houses[h].Xmin(houses[h].x) - houses[h].freespace - minimumDistance) < 0:
-    #         houses[h].extraFreespace = houses[h].Xmin(houses[h].x)
-    #         print("Hello3")
-    #     elif (houses[h].Xmax(houses[h].x) + houses[h].freespace + minimumDistance) > 180:
-    #         houses[h].extraFreespace = 180 - (houses[h].Xmax(houses[h].x))
-    #         print("Hello4")
-    #     else:
-    #         houses[h].extraFreespace = minimumDistance
+water = cl.Water(3)
+water.generateWater()
+print(water.listOfBodies)
 
 
 print("Total value: {}".format(round(grid.totalValue(grid.housesList), 2)))
 print("Total runtime: {}".format(datetime.now() - startTime))
 
-PlotHouses()
+vs.PlotHouses(grid)

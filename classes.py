@@ -1,15 +1,17 @@
+import numpy as np
+
 class Grid:
     def __init__(self, housesList = []):
         self.housesList = housesList
         self.areaWidth = 180
         self.areaHeight = 160
+        self.value = 0
 
     def totalValue(self, housesList):
-        value = 0
         for house in housesList:
-            value += house.value
-            value += (house.extraFreespace - house.freespace) * house.valueUpdate * house.value
-        return value
+            self.value += house.value
+            self.value += (house.extraFreespace - house.freespace) * house.valueUpdate * house.value
+        return self.value
 
 # Declare elements of house in class.
 class House:
@@ -90,3 +92,46 @@ class House:
 
     def totalHeight(self):
         return self.height + self.freespace * 2
+
+class Water:
+    def __init__(self, amountOfBodies):
+        self.amountOfBodies = amountOfBodies
+        self.totalSurface = 5760
+        self.listOfBodies = []
+
+    def generateWater(self):
+        totalSurface = self.totalSurface
+        dimensions = {}
+
+        for body in range(self.amountOfBodies - 1):
+            width = 10
+            height = 2
+            while ((width / height) >= 4) or ((width / height) <= 0.25) and ((width * height) >= totalSurface):
+                width = np.random.randint(low=1, high=144)
+                height = np.random.randint(low=1, high=144)
+            dimensions = {'width': width, 'height': height}
+            totalSurface = totalSurface - (width * height)
+            self.listOfBodies.append(dimensions)
+
+        width = 10
+        height = 2
+        while ((width * height) is totalSurface):
+            width = np.random.randint(low=1, high=144)
+            height = np.random.randint(low=1, high=144)
+        dimensions = {'width': width, 'height': height}
+        self.listOfBodies.append(dimensions)
+
+
+
+
+
+
+
+
+
+
+
+
+    # 5760 opp
+    # langste zijde max: 144
+    # kortste zijde min: 40
