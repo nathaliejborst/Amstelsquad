@@ -77,29 +77,7 @@ for familyHouses in range(amountOfFamilyHouses):
     # Tries to place house at the waterside, else places it random in the grid (no priority: call pai.placeHouse() instead)
     pai.placeHouseWithWatersidePriority(familyHouse, grid)
 
-# Add extrafreespace for every house.
-for h in range(len(grid.housesList)):
-    # Add list of distance to other houses to class instance
-    grid.housesList[h].distanceToOthers = md.GetDistance(h, grid.housesList)
-
-    # Get minimum distance and nr of that house in the houses[]-list
-    minimumDistance, position = md.getMinimum(grid.housesList[h].distanceToOthers)
-    # Returns amount of decimalpoints
-    decimalPointsOfMinimum = str(minimumDistance)[::-1].find('.')
-
-    # Makes sure water has no freespace
-    if grid.housesList[h].freespace is not 0:
-        # If minimum has more than 2 decimalpoints, then distance if calculated using Pythagoras
-        if (decimalPointsOfMinimum > 2):
-            # take the smallest distance as largest possible freespace
-            if grid.housesList[h].distanceToOthers[position]['x'] < grid.housesList[h].distanceToOthers[position]['y']:
-                grid.housesList[h].extraFreespace = grid.housesList[h].distanceToOthers[position]['y']
-            else:
-                grid.housesList[h].extraFreespace = grid.housesList[h].distanceToOthers[position]['x']
-        else:
-            grid.housesList[h].extraFreespace = minimumDistance
-    else:
-        grid.housesList[h].extraFreespace = 0
+md.addFreeSpaceToHouse(grid)
 
 print("Total value: {}".format(round(grid.totalValue(grid.housesList), 2)))
 print("Total runtime: {}".format(datetime.now() - startTime))
