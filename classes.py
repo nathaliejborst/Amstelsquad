@@ -1,8 +1,10 @@
 import numpy as np
+import math
 
 class Grid:
-    def __init__(self, housesList = []):
+    def __init__(self, housesList = [], waterBodiesList = []):
         self.housesList = housesList
+        self.waterBodiesList = waterBodiesList
         self.areaWidth = 180
         self.areaHeight = 160
         self.value = 0
@@ -23,6 +25,10 @@ class House:
         self.valueUpdate = valueUpdate
         self.x = x
         self.y = y
+        # self.Xmin = self.x
+        # self.Xmax = self.x + self.width
+        # self.Ymin = self.y
+        # self.Ymax = self.y + self.height
         self.color = color
         self.distanceToOthers = distanceToOthers
         self.extraFreespace = extraFreespace
@@ -94,44 +100,28 @@ class House:
         return self.height + self.freespace * 2
 
 class Water:
-    def __init__(self, amountOfBodies):
-        self.amountOfBodies = amountOfBodies
-        self.totalSurface = 5760
-        self.listOfBodies = []
+    def __init__(self):
+        self.totalSurface = 5670
+        self.width = 0
+        self.height = 0
+        self.x = 0
+        self.y = 0
+        self.color = 'blue'
+        self.surface = (self.width * self.height)
 
-    def generateWater(self):
-        totalSurface = self.totalSurface
-        dimensions = {}
+    def corners(self, x, y):
+        bottomLeft = [x, y]
+        upperLeft = [x, (y + self.height)]
+        upperRight = [(x + self.width), (y + self.height)]
+        bottomRight = [(x + self.width), y]
 
-        for body in range(self.amountOfBodies - 1):
-            width = 10
-            height = 2
-            while ((width / height) >= 4) or ((width / height) <= 0.25) and ((width * height) >= totalSurface):
-                width = np.random.randint(low=1, high=144)
-                height = np.random.randint(low=1, high=144)
-            dimensions = {'width': width, 'height': height}
-            totalSurface = totalSurface - (width * height)
-            self.listOfBodies.append(dimensions)
+        return [bottomLeft, upperLeft, upperRight, bottomRight]
 
-        width = 10
-        height = 2
-        while ((width * height) is totalSurface):
-            width = np.random.randint(low=1, high=144)
-            height = np.random.randint(low=1, high=144)
-        dimensions = {'width': width, 'height': height}
-        self.listOfBodies.append(dimensions)
-
-
-
-
-
-
-
-
-
-
-
-
-    # 5760 opp
-    # langste zijde max: 144
-    # kortste zijde min: 40
+    def Xmin(self, x):
+        return x
+    def Xmax(self, x):
+        return (x + self.width)
+    def Ymin(self, y):
+        return y
+    def Ymax(self, y):
+        return (y + self.height)

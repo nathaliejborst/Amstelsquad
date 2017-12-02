@@ -9,6 +9,9 @@ def PlotHouses(grid):
     area.set_aspect('equal', adjustable='box')
     area.set_title('Amstelhaege ${}'.format(grid.value))
 
+    for waterBody in grid.waterBodiesList:
+        area.add_patch(plt.Polygon(waterBody.corners(waterBody.x, waterBody.y), color=waterBody.color))
+
     for house in grid.housesList:
         area.add_patch(plt.Polygon(house.corners(house.x, house.y), color=house.color))
         # area.add_patch(plt.Polygon(house.spacecorners(house.x, house.y), fill=False))
