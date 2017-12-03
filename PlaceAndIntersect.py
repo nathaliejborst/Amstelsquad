@@ -1,5 +1,6 @@
 import numpy as np
 from shapely.geometry import Polygon
+import MinimumDistance as md
 
 # Amount of times it tries to place a house at the waterside
 trialTimes = 100
@@ -17,14 +18,13 @@ def leftSideOfWater(houseType, grid):
                 houseType.x = waterBody.Xmin(waterBody.x) - houseType.width
                 houseType.y = np.random.randint(low=waterBody.Ymin(waterBody.y), high=waterBody.Ymax(waterBody.y) - houseType.height)
 
-                p1 = Polygon(houseType.corners(houseType.x, houseType.y))
-                s1 = Polygon(houseType.spacecorners(houseType.x, houseType.y))
-
                 # Check if house intersects with other houses
-                intersect = intersectHouse(p1, s1, grid)
+                intersect = intersectHouse(houseType, grid)
 
                 # Add house to the grid if it doesn't intersect with other houses
                 if intersect is False:
+                    houseType.position = len(grid.housesList)
+                    houseType.status = 'placed'
                     grid.housesList.append(houseType)
                     return True
         except:
@@ -42,14 +42,13 @@ def topSideOfWater(houseType, grid):
                 houseType.x = np.random.randint(low=waterBody.Xmin(waterBody.x), high=waterBody.Xmax(waterBody.x) - houseType.width)
                 houseType.y = waterBody.Ymax(waterBody.y)
 
-                p1 = Polygon(houseType.corners(houseType.x, houseType.y))
-                s1 = Polygon(houseType.spacecorners(houseType.x, houseType.y))
-
                 # Check if house intersects with other houses
-                intersect = intersectHouse(p1, s1, grid)
+                intersect = intersectHouse(houseType, grid)
 
                 # Add house to the grid if it doesn't intersect with other houses
                 if intersect is False:
+                    houseType.position = len(grid.housesList)
+                    houseType.status = 'placed'
                     grid.housesList.append(houseType)
                     return True
         except:
@@ -68,15 +67,13 @@ def rightSideOfWater(houseType, grid):
                 houseType.x = waterBody.Xmax(waterBody.x)
                 houseType.y = np.random.randint(low=waterBody.Ymin(waterBody.y), high=waterBody.Ymax(waterBody.y) - houseType.height)
 
-
-                p1 = Polygon(houseType.corners(houseType.x, houseType.y))
-                s1 = Polygon(houseType.spacecorners(houseType.x, houseType.y))
-
                 # Check if house intersects with other houses
-                intersect = intersectHouse(p1, s1, grid)
+                intersect = intersectHouse(houseType, grid)
 
                 # Add house to the grid if it doesn't intersect with other houses
                 if intersect is False:
+                    houseType.position = len(grid.housesList)
+                    houseType.status = 'placed'
                     grid.housesList.append(houseType)
                     return True
         except:
@@ -95,14 +92,13 @@ def bottomSideOfWater(houseType, grid):
                 houseType.x = np.random.randint(low=waterBody.Xmin(waterBody.x), high=waterBody.Xmax(waterBody.x) - houseType.width)
                 houseType.y = waterBody.Ymin(waterBody.y) - houseType.height
 
-                p1 = Polygon(houseType.corners(houseType.x, houseType.y))
-                s1 = Polygon(houseType.spacecorners(houseType.x, houseType.y))
-
                 # Check if house intersects with other houses
-                intersect = intersectHouse(p1, s1, grid)
+                intersect = intersectHouse(houseType, grid)
 
                 # Add house to the grid if it doesn't intersect with other houses
                 if intersect is False:
+                    houseType.position = len(grid.housesList)
+                    houseType.status = 'placed'
                     grid.housesList.append(houseType)
                     return True
         except:
@@ -125,21 +121,20 @@ def placeHouse(houseType, grid):
                               high=grid.areaHeight - houseType.freespace -
                               houseType.height)
 
-
-        # Declare corners and free space corners for house to be placed.
-        p1 = Polygon(houseType.corners(houseType.x, houseType.y))
-        s1 = Polygon(houseType.spacecorners(houseType.x, houseType.y))
-
-        # Check if house intersects with water
-        intersect = intersectWater(p1, grid)
+        # Check if house intersects with water and other houses
+        intersect = intersectWater(houseType, grid)
         if intersect is False:
-            # Check if house intersects with other houses already placed
-            intersect = intersectHouse(p1, s1, grid)
+            intersect = intersectHouse(houseType, grid)
 
     # Place house on grid if house doesn't intersect with either water or another house
     if intersect is False:
-        #  Add placed house to list of houses.
-        grid.housesList.append(houseType)
+        if houseType.status == 'placed':
+            m = 0
+        else:
+            houseType.position = len(grid.housesList)
+            houseType.status = 'placed'
+            grid.housesList.append(houseType)
+
 
 # Place first maison manually in the corner of the grid
 def placeFirstMaison(houseType, grid):
@@ -147,7 +142,8 @@ def placeFirstMaison(houseType, grid):
     houseType.y = houseType.freespace
     houseType.color = 'red'
 
-    # houses.append(houseType)
+    houseType.position = len(grid.housesList)
+    houseType.status = 'placed'
     grid.housesList.append(houseType)
 
 # Tries to place house at the waterside, else places it randomly in the grid
@@ -159,7 +155,10 @@ def placeHouseWithWatersidePriority(houseType, grid):
                         placeHouse(houseType, grid)
 
 # Checks if a polygon intersects with the water
-def intersectWater(p1, grid):
+def intersectWater(houseType, grid):
+    # Declare corners for house to be placed.
+    p1 = Polygon(houseType.corners(houseType.x, houseType.y))
+
     for waterBody in grid.waterBodiesList:
         p2 = Polygon(waterBody.corners(waterBody.x, waterBody.y))
         if p1.intersects(p2):
@@ -167,10 +166,19 @@ def intersectWater(p1, grid):
     return False
 
 # Checks if a polygon intersects with another house
-def intersectHouse(p1, s1, grid):
+def intersectHouse(houseType, grid):
+    # Declare corners and free space corners for house to be placed.
+    p1 = Polygon(houseType.corners(houseType.x, houseType.y))
+    s1 = Polygon(houseType.spacecorners(houseType.x, houseType.y))
+
     for house in grid.housesList:
         p2 = Polygon(house.corners(house.x, house.y))
         s2 = Polygon(house.spacecorners(house.x, house.y))
         if p1.intersects(p2) is True or p1.intersects(s2) is True or s1.intersects(p2) is True:
-            return True
+            if house.position is not houseType.position:
+                return True
     return False
+
+def moveHouse(houseType, grid):
+    placeHouse(houseType, grid)
+    md.moveHouse(houseType, grid)

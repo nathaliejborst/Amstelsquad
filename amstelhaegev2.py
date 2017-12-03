@@ -26,9 +26,9 @@ grid = cl.Grid()
 # Choose area variant by changing areaVariant to 1, 2 or 3.
 areaVariant = 1
 amountOWater = 2
-amountOfMaisons = (3 * areaVariant) - 1     # Minus 1, because first maison is placed manually
-amountOfBungalows = 5 * areaVariant
-amountOfFamilyHouses = 12 * areaVariant
+amountOfMaisons = (3 * cl.areaVariant) - 1     # Minus 1, because first maison is placed manually
+amountOfBungalows = 5 * cl.areaVariant
+amountOfFamilyHouses = 12 * cl.areaVariant
 totalWaterSurface = 5760
 
 # To test, place bodies of water manually in the grid
@@ -44,14 +44,6 @@ for i in range(amountOWater):
     water.x = x[i]
     water.y = y[i]
     grid.waterBodiesList.append(water)
-    # waterBodies.append(water)
-
-# water = cl.Water()
-# water.width = 144
-# water.height = 40
-# water.x = 18
-# water.y = 60
-# waterBodies.append(water)
 
 pai.placeFirstMaison(cl.House(width=11, height=10.5, freespace=6, value=610000,
            valueUpdate=0.06), grid)
@@ -64,7 +56,7 @@ for maisons in range(amountOfMaisons):
     pai.placeHouseWithWatersidePriority(maison, grid)
 
 # Place bungalows
-for bungalows in range (amountOfBungalows):
+for bungalows in range(amountOfBungalows):
     bungalow = cl.House(width=10, height=7.5, freespace=3, value=399000,
                  valueUpdate=0.04, color='orange')
     # Tries to place house at the waterside, else places it random in the grid (no priority: call pai.placeHouse() instead)
@@ -77,9 +69,18 @@ for familyHouses in range(amountOfFamilyHouses):
     # Tries to place house at the waterside, else places it random in the grid (no priority: call pai.placeHouse() instead)
     pai.placeHouseWithWatersidePriority(familyHouse, grid)
 
-md.addFreeSpaceToHouse(grid)
+# Adds the extra freespace to all houses after placing them randomly on the grid
+md.addExtraFreespaceToAllHouse(grid)
 
-print("Total value: {}".format(round(grid.totalValue(grid.housesList), 2)))
+print("Total value: {}".format(round(grid.totalValue(), 2)))
 print("Total runtime: {}".format(datetime.now() - startTime))
 
 vs.PlotHouses(grid)
+
+# Moves everyhouse and plots after replacing 5 houses
+for house in grid.housesList:
+    pai.moveHouse(house, grid)
+    grid.totalValue()
+    if house.position % 5 is 0:
+        vs.PlotHouses(grid)
+        print(grid.value)

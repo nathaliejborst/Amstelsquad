@@ -1,6 +1,8 @@
 import numpy as np
 import math
 
+areaVariant = 1
+
 class Grid:
     def __init__(self, housesList = [], waterBodiesList = []):
         self.housesList = housesList
@@ -9,14 +11,16 @@ class Grid:
         self.areaHeight = 160
         self.value = 0
 
-    def totalValue(self, housesList):
-        for house in housesList:
-            self.value += house.value
-            self.value += (house.extraFreespace - house.freespace) * house.valueUpdate * house.value
+    def totalValue(self):
+        value = 0
+        for house in self.housesList:
+            value += house.value
+            value += (house.extraFreespace - house.freespace) * house.valueUpdate * house.value
+        self.value = value
         return self.value
 
 # Declare elements of house in class.
-class House:
+class House():
     def __init__(self, width, height, freespace, value, valueUpdate, x=0, y=0, color=None, distanceToOthers = [], extraFreespace=0):
         self.width = width
         self.height = height
@@ -25,25 +29,37 @@ class House:
         self.valueUpdate = valueUpdate
         self.x = x
         self.y = y
-        # self.Xmin = self.x
-        # self.Xmax = self.x + self.width
-        # self.Ymin = self.y
-        # self.Ymax = self.y + self.height
+        self.Xmin = self.x
+        self.Xmax = self.x + self.width
+        self.Ymin = self.y
+        self.Ymax = self.y + self.height
         self.color = color
-        self.distanceToOthers = distanceToOthers
+        self.distanceToOthers = [None] * (areaVariant * 20)
         self.extraFreespace = extraFreespace
+        self.status = 'not placed'
+        self.position = None
+        self.positionNearestHouse = None
 
     def area(self):
         return self.width * self.height
 
-    def Xmin(self, x):
-        return x
-    def Xmax(self, x):
-        return (x + self.width)
-    def Ymin(self, y):
-        return y
-    def Ymax(self, y):
-        return (y + self.height)
+    def Xmint(self):
+        return self.x
+    def Xmaxt(self):
+        return self.x + self.width
+    def Ymint(self):
+        return self.y
+    def Ymaxt(self):
+        return self.y + self.height
+
+    # def Xmin(self, x):
+    #     return x
+    # def Xmax(self, x):
+    #     return (x + self.width)
+    # def Ymin(self, y):
+    #     return y
+    # def Ymax(self, y):
+    #     return (y + self.height)
 
     def corners(self, x, y):
         bottomLeft = [x, y]
