@@ -13,6 +13,7 @@ from datetime import datetime
 import visualize as vs
 import MinimumDistance as md
 import PlaceAndIntersect as pai
+import GridExporterImporter as gei
 
 startTime = datetime.now()
 
@@ -56,19 +57,19 @@ for i in range(amountOWater):
 pai.placeFirstMaison(cl.House(width=11, height=10.5, freespace=6, value=610000,
            valueUpdate=0.06), grid)
 
-# Place maisons
-for maisons in range(amountOfMaisons):
-    maison = cl.House(width=11, height=10.5, freespace=6, value=610000,
-               valueUpdate=0.06, color='red')
-    # Tries to place house at the waterside, else places it random in the grid (no priority: call pai.placeHouse() instead)
-    pai.placeHouseWithWatersidePriority(maison, grid)
-
 # Place bungalows
 for bungalows in range(amountOfBungalows):
     bungalow = cl.House(width=10, height=7.5, freespace=3, value=399000,
                  valueUpdate=0.04, color='orange')
     # Tries to place house at the waterside, else places it random in the grid (no priority: call pai.placeHouse() instead)
     pai.placeHouseWithWatersidePriority(bungalow, grid)
+
+# Place maisons
+for maisons in range(amountOfMaisons):
+    maison = cl.House(width=11, height=10.5, freespace=6, value=610000,
+               valueUpdate=0.06, color='red')
+    # Tries to place house at the waterside, else places it random in the grid (no priority: call pai.placeHouse() instead)
+    pai.placeHouseWithWatersidePriority(maison, grid)
 
 # Place familyhouses
 for familyHouses in range(amountOfFamilyHouses):
@@ -95,11 +96,12 @@ grid.totalValue()
 #         vs.PlotHouses(grid)
 #         print(grid.value)
 
-repositionHouse = 20
-repeatHillclimber = 15
+repositionHouse = 2
+repeatHillclimber = 2
 
 temp_value = grid.value
 for i in range(repeatHillclimber):
+    print(i)
     for house in grid.housesList:
         for i in range(repositionHouse):            # Store x and y coordinates in temporary values if algrorithm can't find a better position to increase value
             temp_x = house.x
@@ -114,5 +116,7 @@ for i in range(repeatHillclimber):
                 md.adjustFreespace(grid)            # Adjusts freespace for all houses
         print(grid.value)
         print()
+
+gei.writeToFile(grid.value)
 
 vs.PlotHouses(grid)
