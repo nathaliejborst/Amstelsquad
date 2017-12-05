@@ -70,6 +70,32 @@ $ Command C
 
 On a grid of 156 by 176 gives 27.456 'blocks' can be placed somewhere. In reality, the plotting of houses is lower since this number applies to the smallest house. Next to that, no account is taken of water and of already placed houses. The State-space is as maximum 27.456 per house. 
 
+A more specific calculation is with half meters. On a grid of 156 by 176, there are twice (312 * 352) possibilities to place a smaller house. That are 109.824 possibilities for the smallest house. 
+
+(154 * 174)^2 = 308 * 348 = 107.184 (bungalow)
+(148 * 168)^2 = 296 * 336 = 99.456 (maison)
+
+single-family home = h1 = 12
+bungalow = h2 = 5
+maison = h3 = 3
+
+For the 20-houses-variant n = 1, for the 40-houses-variant n = 2 and for the 60-houses-variant n = 3.
+You can rotate a bungalow or a maison 90 degrees for a different solution so, x = 2 for a bungalow and a maison.
+
+A better state-space calculation (non-discrete) reads as follows:
+109.824 to the power of (n*h1) + (x * 107.184) to the power of (n*h2) + (x * 99.456) to the power of (n*h3) = state space non discrete.
+109.824^(n*12) + 214.368^(n*5) + 99.456^(n*3) = state space non discrete.
+
+20-houses-variant = 3,079~ * 10^60 + 4,527~ * 10^26 + 9,838~ * 10^14 = 1,74~ * 10^101
+
+40-houses-variant = 9,478~ * 10^120 + 2,049~ * 10^53 + 9,678~ * 10^29 = 2,12~ * 10^203
+
+60-houses-variant = 2,918~ * 10^181 + 9,278~ * 10^79 + 9,521~ * 10^44 = 2,17~ * 10^305
+
+
+When there is a non discrete possibility to place houses (float), the asymptote would go towards infinity.
+
+### Upper- and Lower-Bound Value
 The maximum value is: 36 * 285.000 + 15 * 399.000 + 9 * 610.000 = 10.260.000 + 5.985.000 + 5.490.000 = 21.735.000
 
 The space already taken from the grid (180*160= 28.800 ) = 36*(10*10) + 15*(13*10,5) + 9*(17*16,5) = 3600 + 2047,5 + 2524,5 = 8172 + water (160*180*0,2=5760) = 13.932. Total grid minus already taken space = 28.800 - 13.932 = 14.868 is available for freespace. 
