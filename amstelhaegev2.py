@@ -84,9 +84,7 @@ md.addExtraFreespaceToAllHouse(grid)
 print("Total value: {}".format(round(grid.totalValue(), 2)))
 print("Total runtime: {}".format(datetime.now() - startTime))
 
-vs.PlotHouses(grid)
 grid.totalValue()
-
 
 
 # for house in grid.housesList:
@@ -97,13 +95,14 @@ grid.totalValue()
 #         print(grid.value)
 
 repositionHouse = 2
-repeatHillclimber = 2
+repeatHillclimber = 10
+
 
 temp_value = grid.value
 for i in range(repeatHillclimber):
     print(i)
     for house in grid.housesList:
-        for i in range(repositionHouse):            # Store x and y coordinates in temporary values if algrorithm can't find a better position to increase value
+        for j in range(repositionHouse):            # Store x and y coordinates in temporary values if algrorithm can't find a better position to increase value
             temp_x = house.x
             temp_y = house.y
             pai.moveHouse(house, grid)              # Moves house and adjusts freespace for all houses
@@ -116,7 +115,8 @@ for i in range(repeatHillclimber):
                 md.adjustFreespace(grid)            # Adjusts freespace for all houses
         print(grid.value)
         print()
+    vs.livePlot(grid, i, repeatHillclimber)
+
 
 gei.writeToFile(grid.value)
-
-vs.PlotHouses(grid)
+# vs.PlotHouses(grid)
