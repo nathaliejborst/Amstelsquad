@@ -43,6 +43,7 @@ class House():
     def area(self):
         return self.width * self.height
 
+
     def Xmint(self):
         return self.x
     def Xmaxt(self):
@@ -52,6 +53,8 @@ class House():
     def Ymaxt(self):
         return self.y + self.height
 
+
+    #
     # def Xmin(self, x):
     #     return x
     # def Xmax(self, x):
@@ -77,17 +80,17 @@ class House():
 
     def extraFreeSpaceCorners(self, x, y):
         # Adjusts freespace if the bottom side of the freespace crosses the left border of the grid (x < 0).
-        if x - self.extraFreespace < 0:
-            self.extraFreespace = x
-        # CAdjusts freespace if the right side of the freespace crosses the right border of the grid (x > 180).
-        if x + self.width +  self.extraFreespace > 180:
-            self.extraFreespace = 180 - x - self.width
-        # Adjusts freespace if the left side of the freespace crosses the bottom of the grid (y < 0).
-        if y - self.extraFreespace < 0:
-            self.extraFreespace = y
-        # Adjusts freespace if the top side of the freespace crosses the bottom border of the grid (y > 160).
-        if y + self.height + self.extraFreespace > 160:
-            self.extraFreespace = 160 - y - self.height
+        # if x - self.extraFreespace < 0:
+        #     self.extraFreespace = x
+        # # CAdjusts freespace if the right side of the freespace crosses the right border of the grid (x > 180).
+        # if x + self.width +  self.extraFreespace > 180:
+        #     self.extraFreespace = 180 - x - self.width
+        # # Adjusts freespace if the left side of the freespace crosses the bottom of the grid (y < 0).
+        # if y - self.extraFreespace < 0:
+        #     self.extraFreespace = y
+        # # Adjusts freespace if the top side of the freespace crosses the bottom border of the grid (y > 160).
+        # if y + self.height + self.extraFreespace > 160:
+        #     self.extraFreespace = 160 - y - self.height
 
         # Adjust corners of freespace to the new value because of the limitations of the border of the grid.
         leftX = x - self.extraFreespace

@@ -135,7 +135,6 @@ def placeHouse(houseType, grid):
             houseType.status = 'placed'
             grid.housesList.append(houseType)
 
-
 # Place first maison manually in the corner of the grid
 def placeFirstMaison(houseType, grid):
     houseType.x = houseType.freespace

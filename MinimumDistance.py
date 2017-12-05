@@ -73,7 +73,7 @@ def getMinimum(house, grid):
 
 # Adds the extra freespace to a house
 def addExtraFreespace(house, grid):
-    # Get minimum distance and nr of that house in the houseslist
+    # Get minimum distance and nr of that house in the houses[]-list
     minimumDistance, position = getMinimum(house, grid)
     # Returns amount of decimalpoints
     decimalPointsOfMinimum = str(minimumDistance)[::-1].find('.')
@@ -92,13 +92,17 @@ def addExtraFreespace(house, grid):
     else:
         house.extraFreespace = 0
 
+# Moves house and adjusts freespace
+def moveHouse(house0, grid):
+    for house1 in grid.housesList:
+        receiveHouses(house0, house1)
+    addExtraFreespace(house0, grid)
+    for house1 in grid.housesList:
+        addExtraFreespace(house1, grid)
 
-def moveHouse(house, grid):
-    for x in grid.housesList:
-        receiveHouses(house, x)
-    addExtraFreespace(house, grid)
-    for i in grid.housesList:
-        # if(house.position is i.positionNearestHouse):
-        #     addExtraFreespace(i, grid)
-        # if(house.positionNearestHouse is i.position):
-        addExtraFreespace(i, grid)
+# Adjusts freespace for all houses
+def adjustFreespace(grid):
+    for house1 in grid.housesList:
+        for house2 in grid.housesList:
+            receiveHouses(house1, house2)
+        addExtraFreespace(house1, grid)
