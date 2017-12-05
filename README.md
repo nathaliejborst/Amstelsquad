@@ -3,7 +3,7 @@
 This program offers the possibility to plot a map with three housevariants (20 houses, 40 houses, 60 houses) at the request of the municipality for the new district Amstelhaege. The value of a map is the sum of all houses in the neighborhood including the number of meters of free standing per house. Thereby an attempt is made to realize a maximum value and a maximum free standing. Surface water is also added and there are three different houses, namely single-family homes, bungalows and maisonettes.
 
 ## Example Visualisation
-![alt text](https://raw.githubusercontent.com/nathaliejborst/Amstelsquad/master/visualisations/Figure_1.png?token=AeMG2jwWkc4WMbfy_iM_GiS2AyqHBM2Oks5aJ9mywA%3D%3D)
+![alt text](https://raw.githubusercontent.com/nathaliejborst/Amstelsquad/master/visualisations/Figure_1.png)
 
 ## Getting Started
 
