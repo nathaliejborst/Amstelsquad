@@ -137,8 +137,11 @@ def placeHouse(houseType, grid):
 
 # Place first maison manually in the corner of the grid
 def placeFirstMaison(houseType, grid):
-    houseType.x = houseType.freespace
-    houseType.y = houseType.freespace
+    houseType.x = np.random.randint(low=houseType.freespace, high=grid.areaWidth -
+                          houseType.freespace - houseType.width)
+    houseType.y = np.random.randint(low=houseType.freespace,
+                          high=grid.areaHeight - houseType.freespace -
+                          houseType.height)
     houseType.color = 'red'
 
     houseType.position = len(grid.housesList)

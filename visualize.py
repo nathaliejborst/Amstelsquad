@@ -8,6 +8,7 @@ def PlotHouses(grid):
     area.set_ylim(ymin=0, ymax=grid.areaHeight)
     area.set_aspect('equal', adjustable='box')
     area.set_title('Amstelhaege ${}'.format(grid.value))
+    area.set_facecolor((0.624,0.816,0.404))
 
     for waterBody in grid.waterBodiesList:
         area.add_patch(plt.Polygon(waterBody.corners(waterBody.x, waterBody.y), color=waterBody.color))
@@ -21,6 +22,6 @@ def PlotHouses(grid):
                                                   width=house.extraFreeSpaceCorners(house.x, house.y)[3][0]-house.extraFreeSpaceCorners(house.x, house.y)[0][0],
                                                   height=house.extraFreeSpaceCorners(house.x, house.y)[1][1]-house.extraFreeSpaceCorners(house.x, house.y)[0][1],
                                                   boxstyle='round, pad=0, rounding_size={}'.format(house.freespace+house.extraFreespace),
-                                                  transform=area.transData, ec='black', fill=False))
+                                                  transform=area.transData, ec='black', fill=True, alpha=0.2, color=house.color))
 
     plt.show()
