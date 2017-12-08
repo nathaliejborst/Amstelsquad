@@ -1,4 +1,8 @@
+# Import csv package
 import csv
+
+
+'''saveValue'''
 
 
 def saveValue(totalvalue):
@@ -6,8 +10,11 @@ def saveValue(totalvalue):
         fieldnames = ["value"]
         writer = csv.DictWriter(filewriter, fieldnames=fieldnames)
         writer.writerow({"value": totalvalue})
-
-
+#
+#
+# '''writeHousesToFile'''
+#
+#
 # def writeHousesToFile():
 #     with open('coordinatesHouses.csv', 'w', newline='') as filewriter:
 #         fieldnames = ['x', 'y', 'width', 'value']
@@ -15,6 +22,9 @@ def saveValue(totalvalue):
 #         writer.writerow({'value': grid.value})
 #         for house in grid.housesList:
 #             writer.writerow({'x': house.x, 'y': house.y, 'width': house.width})
+#
+#
+# '''writeWaterbodiesToFile'''
 #
 #
 # def writeWaterbodiesToFile():

@@ -1,4 +1,4 @@
-# Filename: amstelhaege.py
+# Filename: main.py
 # Authors: Nathalie Borst, Dennis Broekhuizen, Bob Hamelers
 #
 # Description: Plots potential residential area Amstelhaege.
