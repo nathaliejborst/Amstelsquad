@@ -102,3 +102,4 @@ ENV/
 
 # CSV
 *.csv
+!results/*.csv
