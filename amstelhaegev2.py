@@ -8,7 +8,26 @@ from datetime import datetime
 import visualize as vs
 import MinimumDistance as md
 import PlaceAndIntersect as pai
-import GridExporterImporter as gei
+import filewriter as fw
+import csv
+
+
+def writeHousesToFile():
+    with open('coordinatesHouses.csv', 'w', newline='') as filewriter:
+        fieldnames = ['x', 'y', 'width', 'value']
+        writer = csv.DictWriter(filewriter, fieldnames=fieldnames)
+        writer.writerow({'value': grid.value})
+        for house in grid.housesList:
+            writer.writerow({'x': house.x, 'y': house.y, 'width': house.width})
+
+
+def writeWaterbodiesToFile():
+    with open('coordinatesWaterbodies.csv', 'w', newline='') as filewriter:
+        fieldnames = ['x', 'y', 'width', 'height']
+        writer = csv.DictWriter(filewriter, fieldnames=fieldnames)
+        for body in grid.waterBodiesList:
+            writer.writerow({'x': body.x, 'y': body.y, 'width': body.width, 'height': body.height})
+
 
 startTime = datetime.now()
 
@@ -112,6 +131,8 @@ for i in range(repeatHillclimber):
         print(grid.value)
         print()
     vs.live_plot(grid, i, repeatHillclimber)
+    writeHousesToFile()
+    writeWaterbodiesToFile()
 
 
-gei.writeToFile(grid.value)
+fw.saveValue(grid.value)
