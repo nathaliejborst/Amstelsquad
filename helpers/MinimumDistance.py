@@ -1,6 +1,11 @@
+# Import package
 import math
 
-# Returns a list for every house with the distances to all other houses (house.distanceToOthers)
+
+'''addExtraFreespaceToAllHouse function'''
+
+
+# Return a list for every house with the distances to all other houses (house.distanceToOthers)
 def addExtraFreespaceToAllHouse(grid):
     i=0
     for house in grid.housesList:
@@ -10,13 +15,21 @@ def addExtraFreespaceToAllHouse(grid):
         i += 1
         addExtraFreespace(house, grid)
 
-# Calculates distance between two houses and adds it to both's distanceToOthers-lists
+
+'''receiveHouses function'''
+
+
+# Calculate distance between two houses and adds it to both's distanceToOthers-lists
 def receiveHouses(house0, house1):
     distance = GetDistance(house0, house1)
 
     # Adjust both lists with distance to the other house
     house0.distanceToOthers[house1.position] = distance
     house1.distanceToOthers[house0.position] = distance
+
+
+'''GetDistance function'''
+
 
 def GetDistance(house0, house1):
     distances = {}
@@ -41,14 +54,18 @@ def GetDistance(house0, house1):
         distance = round(math.sqrt(pow(distance_x, 2) + pow(distance_y, 2)), 4)
         distances = {'distance': distance, 'x': distance_x, 'y': distance_y}
 
-    # Set distance to itself to 0:
+    # Set distance to itself to 0
     elif((distance_x is False) and (distance_y is False)):
         distance = 0
         distances = {'distance': distance, 'x': distance_x, 'y': distance_y}
 
     return distances
 
-# Returns the distance between two coordinates on the same axis
+
+''''straightDistance function'''
+
+
+# Return the distance between two coordinates on the same axis
 def straightDistance(min_h, max_h, min_i, max_i):
 
     if((min_h - max_i) >= 0):
@@ -60,7 +77,11 @@ def straightDistance(min_h, max_h, min_i, max_i):
     else:
         return False
 
-# Returns the distance to the nearest house and the position of that nearest house
+
+'''getMinimum function'''
+
+
+# Return the distance to the nearest house and the position of that nearest house
 def getMinimum(house, grid):
     minimum = 1000
     place = 0
@@ -71,18 +92,22 @@ def getMinimum(house, grid):
             place = i
     return minimum, place
 
-# Adds the extra freespace to a house
+
+'''addExtraFreespace function'''
+
+
+# Add the extra freespace to a house
 def addExtraFreespace(house, grid):
     # Get minimum distance and nr of that house in the houses[]-list
     minimumDistance, position = getMinimum(house, grid)
-    # Returns amount of decimalpoints
+    # Return amount of decimalpoints
     decimalPointsOfMinimum = str(minimumDistance)[::-1].find('.')
 
-    # Makes sure water has no freespace
+    # Make sure water has no freespace
     if house.freespace is not 0:
         # If minimum has more than 2 decimalpoints, then distance if calculated using Pythagoras
         if (decimalPointsOfMinimum > 2):
-            # take the smallest distance as largest5 possible freespace
+            # Take the smallest distance as largest5 possible freespace
             if house.distanceToOthers[position]['x'] < house.distanceToOthers[position]['y']:
                 house.extraFreespace = house.distanceToOthers[position]['y']
             else:
@@ -92,7 +117,11 @@ def addExtraFreespace(house, grid):
     else:
         house.extraFreespace = 0
 
-# Moves house and adjusts freespace
+
+'''moveHouse function'''
+
+
+# Move house and adjusts freespace
 def moveHouse(house0, grid):
     for house1 in grid.housesList:
         receiveHouses(house0, house1)
@@ -100,7 +129,11 @@ def moveHouse(house0, grid):
     for house1 in grid.housesList:
         addExtraFreespace(house1, grid)
 
-# Adjusts freespace for all houses
+
+'''adjustFreespace function'''
+
+
+# Adjust freespace for all houses
 def adjustFreespace(grid):
     for house1 in grid.housesList:
         for house2 in grid.housesList:

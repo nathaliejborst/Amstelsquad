@@ -1,9 +1,10 @@
+# Import packages and own files
 import csv
 from helpers import classes as cl
 from helpers import MinimumDistance as md
 from helpers import visualize as vs
 
-# Hoe vaak hij het hele bestand amstelhaegev2 runtime
+# Amount of times main.py is runned
 repetition = 1
 
 # for i in range(repetition):
@@ -17,10 +18,13 @@ repetition = 1
 #         writer.writerow({"value": totalvalue})
 #
 
+# Make grid with call to Grid in classes file
 grid = cl.Grid()
+# Make two lists
 importedHousesList = []
 importedWaterbodiesList = []
 
+# Open houses csv file and read it
 with open('coordinatesHouses.csv') as csvfile:
     i = 0
     reader= csv.reader(csvfile, delimiter=',')
@@ -31,6 +35,7 @@ with open('coordinatesHouses.csv') as csvfile:
             importedHousesList.append(houseCoordinates)
         i +=1
 
+# Open water csv file and read it
 with open('coordinatesWaterbodies.csv') as csvfile:
     reader = csv.reader(csvfile, delimiter=',')
     for row in reader:
@@ -38,6 +43,7 @@ with open('coordinatesWaterbodies.csv') as csvfile:
         bodyCoordinates = {'x': row[0], 'y': row[1], 'width': row[2], 'height': row[3]}
         importedWaterbodiesList.append(bodyCoordinates)
 
+# Set readed water in classes file
 for i in range(len(importedWaterbodiesList)):
     water = cl.Water()
     water.width = int(importedWaterbodiesList[i]['width'])
@@ -46,9 +52,10 @@ for i in range(len(importedWaterbodiesList)):
     water.y = int(importedWaterbodiesList[i]['y'])
     grid.waterBodiesList.append(water)
 
+# Set readed houses in classes file
 for i in range(len(importedHousesList)):
     width = int(importedHousesList[i]['width'])
-    # familyHouse
+    # FamilyHouse
     if width is 8:
         familyHouse = cl.House(width=8, height=8, freespace=2, value=285000,
                             valueUpdate=0.03, color='yellow')
@@ -76,7 +83,9 @@ for i in range(len(importedHousesList)):
         # print("maison: {}".format(importedHousesList[0]['x']))
         grid.housesList.append(maison)
 
-
+# Call to adjustFreespace function in MinimumDistance.py file with grid
 md.adjustFreespace(grid)
+# Give grid.totalValue
 grid.totalValue()
+# Call to plot_houses function in visualize.py with grid
 vs.plot_houses(grid)

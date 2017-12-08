@@ -1,9 +1,14 @@
+# Import packages and own files
 import numpy as np
 from shapely.geometry import Polygon
 from helpers import MinimumDistance as md
 
 # Amount of times it tries to place a house at the waterside
 trialTimes = 100
+
+
+'''leftSideOfWater function'''
+
 
 # Tries to place house at the left side of a waterbody
 def leftSideOfWater(houseType, grid):
@@ -31,6 +36,10 @@ def leftSideOfWater(houseType, grid):
             pass
     return False
 
+
+'''topSideOfWater function'''
+
+
 # Tries to place house at the top side of a waterbody
 def topSideOfWater(houseType, grid):
     i=0
@@ -54,6 +63,10 @@ def topSideOfWater(houseType, grid):
         except:
             pass
     return False
+
+
+'''rightSideOfWater function'''
+
 
 # Tries to place house at the right side of a waterbody
 def rightSideOfWater(houseType, grid):
@@ -80,7 +93,11 @@ def rightSideOfWater(houseType, grid):
             pass
     return False
 
-# Tries to place house at the bottom side of a waterbody
+
+'''bottomSideOfWater function'''
+
+
+# Try to place house at the bottom side of a waterbody
 def bottomSideOfWater(houseType, grid):
     i=0
 
@@ -104,6 +121,10 @@ def bottomSideOfWater(houseType, grid):
         except:
             pass
     return False
+
+
+'''placeHouse function'''
+
 
 # Places a house randomly in the grid
 def placeHouse(houseType, grid):
@@ -135,6 +156,10 @@ def placeHouse(houseType, grid):
             houseType.status = 'placed'
             grid.housesList.append(houseType)
 
+
+'''placeFirstMaison function'''
+
+
 # Place first maison manually in the corner of the grid
 def placeFirstMaison(houseType, grid):
     houseType.x = np.random.randint(low=houseType.freespace, high=grid.areaWidth -
@@ -148,6 +173,10 @@ def placeFirstMaison(houseType, grid):
     houseType.status = 'placed'
     grid.housesList.append(houseType)
 
+
+'''placeHouseWithWatersidePriority function'''
+
+
 # Tries to place house at the waterside, else places it randomly in the grid
 def placeHouseWithWatersidePriority(houseType, grid):
         if topSideOfWater(houseType, grid) is False:
@@ -155,6 +184,10 @@ def placeHouseWithWatersidePriority(houseType, grid):
                 if rightSideOfWater(houseType, grid) is False:
                     if bottomSideOfWater(houseType, grid) is False:
                         placeHouse(houseType, grid)
+
+
+'''intersectWater function'''
+
 
 # Checks if a polygon intersects with the water
 def intersectWater(houseType, grid):
@@ -166,6 +199,10 @@ def intersectWater(houseType, grid):
         if p1.intersects(p2):
             return True
     return False
+
+
+'''intersectHouse function'''
+
 
 # Checks if a polygon intersects with another house
 def intersectHouse(houseType, grid):
@@ -180,6 +217,10 @@ def intersectHouse(houseType, grid):
             if house.position is not houseType.position:
                 return True
     return False
+
+
+'''moveHouse function'''
+
 
 def moveHouse(houseType, grid):
     placeHouse(houseType, grid)

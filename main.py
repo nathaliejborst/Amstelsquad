@@ -3,6 +3,8 @@
 #
 # Description: Plots potential residential area Amstelhaege.
 
+# Import packages and own files
+
 from helpers import classes as cl
 from datetime import datetime
 from helpers import visualize as vs
@@ -28,7 +30,7 @@ def writeWaterbodiesToFile():
         for body in grid.waterBodiesList:
             writer.writerow({'x': body.x, 'y': body.y, 'width': body.width, 'height': body.height})
 
-
+# DateTime runner
 startTime = datetime.now()
 
 # Fixing random state for reproducibility
@@ -37,7 +39,7 @@ startTime = datetime.now()
 # Create instance of the grid
 grid = cl.Grid()
 
-# Declare possible area variants by setting matching amount of housetypes
+# Declare water and possible area variants by setting matching amount of housetypes
 # Choose area variant by changing areaVariant to 1, 2 or 3.
 areaVariant = 1
 
@@ -70,6 +72,7 @@ for i in range(amountOfWater):
 # water.y = 60
 # waterBodies.append(water)
 
+# Place first maison
 pai.placeFirstMaison(cl.House(width=11, height=10.5, freespace=6, value=610000,
                      valueUpdate=0.06), grid)
 
@@ -94,11 +97,14 @@ for familyHouses in range(amountOfFamilyHouses):
     # Tries to place house at the waterside, else places it random in the grid (no priority: call pai.placeHouse() instead)
     pai.placeHouseWithWatersidePriority(familyHouse, grid)
 
+# Call to MinimumDistance.py file with grid for add extra freespace
 md.addExtraFreespaceToAllHouse(grid)
 
+# Two printstatements for the total value and total runtime
 print("Total value: {}".format(round(grid.totalValue(), 2)))
 print("Total runtime: {}".format(datetime.now() - startTime))
 
+# The total value of the grid
 grid.totalValue()
 
 
@@ -109,13 +115,15 @@ grid.totalValue()
 #         vs.PlotHouses(grid)
 #         print(grid.value)
 
+# Reposition number of houses per try and repeat number of Hillclimber
 repositionHouse = 2
 repeatHillclimber = 10
 
+# Hillclimber function
 vs.plot_houses(grid)
 temp_value = grid.value
 for i in range(repeatHillclimber):
-    print(i)
+    print(i)                                        # Printstatement for number of repeatHillclimber rounds
     for house in grid.housesList:
         for j in range(repositionHouse):            # Store x and y coordinates in temporary values if algrorithm can't find a better position to increase value
             temp_x = house.x
@@ -130,9 +138,12 @@ for i in range(repeatHillclimber):
                 md.adjustFreespace(grid)            # Adjusts freespace for all houses
         print(grid.value)
         print()
+
+    # Call to LivePlot function in visualize.py file with grid, i and repeatHillclimber
     vs.live_plot(grid, i, repeatHillclimber)
+    # Call to Writers functions
     writeHousesToFile()
     writeWaterbodiesToFile()
 
-
+# Call to saveValue function in filewriter.py file with grid.value
 fw.saveValue(grid.value)

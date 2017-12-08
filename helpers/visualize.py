@@ -1,17 +1,21 @@
+# Import packages
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 
-# Declaration of items in legend.
+# Declaration of items in legend
 maison_label = patches.Patch(color='red', label='Maison')
 bungalow_label = patches.Patch(color='orange', label='Bungalow')
 family_label = patches.Patch(color='yellow', label='Familyhouse')
 water_label = patches.Patch(color='blue', label='Water')
 
 
+'''PlotHouses function'''
+
+
 def plot_houses(grid):
     """Draws all houses from houselist in a plot."""
 
-    # Declare area.
+    # Declare area
     plt.axis([0, grid.areaWidth, 0, grid.areaHeight])
     plt.gca().set_aspect('equal', adjustable='box')
     plt.gca().set_title('Amstelhaege €{:,}'.format(grid.value),
@@ -26,7 +30,7 @@ def plot_houses(grid):
     plt.tight_layout()
     plt.subplots_adjust(left=0, right=0.775, bottom=0.02)
 
-    # Add patches to plot.
+    # Add patches to plot
     for waterBody in grid.waterBodiesList:
         plt.gca().add_patch(plt.Polygon(waterBody.corners(waterBody.x,
                                         waterBody.y), color=waterBody.color))
@@ -41,14 +45,17 @@ def plot_houses(grid):
                             boxstyle='round, pad=0, rounding_size={}'.format(house.freespace+house.extraFreespace),
                             transform=plt.gca().transData, ec='black', fill=True, alpha=0.2, color=house.color))
 
-    # Show plot.
+    # Show plot
     plt.show()
+
+
+'''LivePlot function'''
 
 
 def live_plot(grid, end, repeatHillclimber):
     """Plots live changes while performing an algrorithm."""
 
-    # Declare area.
+    # Declare area
     plt.ion()
     plt.axis([0, grid.areaWidth, 0, grid.areaHeight])
     plt.gca().set_aspect('equal', adjustable='box')
@@ -64,7 +71,7 @@ def live_plot(grid, end, repeatHillclimber):
     plt.tight_layout()
     plt.subplots_adjust(left=0, right=0.775, bottom=0.02)
 
-    # Add patches to plot.
+    # Add patches to plot
     for waterBody in grid.waterBodiesList:
         plt.gca().add_patch(plt.Polygon(waterBody.corners(waterBody.x,
                                         waterBody.y), color=waterBody.color))
@@ -80,14 +87,14 @@ def live_plot(grid, end, repeatHillclimber):
                             boxstyle='round, pad=0, rounding_size={}'.format(house.freespace+house.extraFreespace),
                             transform=plt.gca().transData, ec='black', fill=True, alpha=0.2, color=house.color))
 
-    # Show updates.
+    # Show updates
     plt.pause(0.05)
 
-    # Show plot at last iteration.
+    # Show plot at last iteration
     if end == repeatHillclimber - 1:
         plt.gca().set_title('Amstelhaege €{:,} final value'.format(grid.value),
                             fontweight="bold")
         plt.show(block=True)
 
-    # Clear area at the end of function.
+    # Clear area at the end of function
     plt.cla()

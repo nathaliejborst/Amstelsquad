@@ -1,8 +1,15 @@
+# Import packages
 import numpy as np
 import math
 
+# Set the area variant
 areaVariant = 3
 
+
+'''Grid class'''
+
+
+# Declare elements of grid in class
 class Grid:
     def __init__(self, housesList = [], waterBodiesList = []):
         self.housesList = housesList
@@ -19,7 +26,11 @@ class Grid:
         self.value = value
         return self.value
 
-# Declare elements of house in class.
+
+'''House class'''
+
+
+# Declare elements of house in class
 class House():
     def __init__(self, width, height, freespace, value, valueUpdate, x=0, y=0, color=None, distanceToOthers = [], extraFreespace=0):
         self.width = width
@@ -118,6 +129,11 @@ class House():
     def totalHeight(self):
         return self.height + self.freespace * 2
 
+
+'''Water class'''
+
+
+# Declare elements of water in class
 class Water:
     def __init__(self):
         self.totalSurface = 5670
