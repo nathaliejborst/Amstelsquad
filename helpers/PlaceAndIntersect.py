@@ -1,6 +1,6 @@
 import numpy as np
 from shapely.geometry import Polygon
-import MinimumDistance as md
+from helpers import MinimumDistance as md
 
 # Amount of times it tries to place a house at the waterside
 trialTimes = 100

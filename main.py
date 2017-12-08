@@ -3,12 +3,12 @@
 #
 # Description: Plots potential residential area Amstelhaege.
 
-import classes as cl
+from helpers import classes as cl
 from datetime import datetime
-import visualize as vs
-import MinimumDistance as md
-import PlaceAndIntersect as pai
-import filewriter as fw
+from helpers import visualize as vs
+from helpers import MinimumDistance as md
+from helpers import PlaceAndIntersect as pai
+from helpers import filewriter as fw
 import csv
 
 

@@ -1,7 +1,7 @@
 import csv
-import classes as cl
-import MinimumDistance as md
-import visualize as vs
+from helpers import classes as cl
+from helpers import MinimumDistance as md
+from helpers import visualize as vs
 
 # Hoe vaak hij het hele bestand amstelhaegev2 runtime
 repetition = 1

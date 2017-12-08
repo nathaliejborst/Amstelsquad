@@ -1,7 +1,7 @@
 import numpy as np
 import math
 
-areaVariant = 1
+areaVariant = 3
 
 class Grid:
     def __init__(self, housesList = [], waterBodiesList = []):
