@@ -13,6 +13,29 @@ from helpers import PlaceAndIntersect as pai
 from helpers import filewriter as fw
 import csv
 
+def userAreaVariantInput():
+    while True:
+        try:
+            areaVariant = int(input("Area variant (nr. between 1 to 3): "))
+            print("[1: Hillclimber]")
+            chooseAlgo = int(input("Choose an algrorithm: "))
+            if chooseAlgo is 1:
+                repeatHillclimber = int(input("Repeat hillclimber: "))
+                repositionHouse =  int(input(" > Reposition 1 house: "))
+        except ValueError:
+            print("   This is not a whole number.")
+            continue
+        if areaVariant < 1 or areaVariant > 3:
+            print("   Please enter a number between 1 to 3")
+            continue
+        if repeatHillclimber < 1 or repositionHouse < 1:
+            print("   Please enter a positive number")
+            continue
+        else:
+            return areaVariant, repeatHillclimber, repositionHouse
+            break
+
+cl.areaVariant, repeatHillclimber, repositionHouse = userAreaVariantInput()
 
 def writeHousesToFile():
     with open('coordinatesHouses.csv', 'w', newline='') as filewriter:
@@ -21,7 +44,6 @@ def writeHousesToFile():
         writer.writerow({'value': grid.value})
         for house in grid.housesList:
             writer.writerow({'x': house.x, 'y': house.y, 'width': house.width})
-
 
 def writeWaterbodiesToFile():
     with open('coordinatesWaterbodies.csv', 'w', newline='') as filewriter:
@@ -122,23 +144,19 @@ for i in range(repeatHillclimber):
             temp_y = house.y
             pai.moveHouse(house, grid)              # Moves house and adjusts freespace for all houses
             if grid.totalValue() >= oldValue:
-                print("moved: {}".format(grid.value))
                 oldValue = grid.totalValue()
             else:                                   # Doesn't move house if value didn't increase so gives it back it's old coordinates
                 house.x = temp_x
                 house.y = temp_y
-                grid.value = oldValue           # Adjust new highest value in grid
+                grid.value = oldValue               # Adjust new highest value in grid
                 md.adjustFreespace(grid)            # Adjusts freespace for all houses
-                # print("before swap: {}".format(grid.value))
                 oldValue = pai.swapHouse(house, grid, oldValue)
-                print(grid.value)
-
-        # print(grid.value)
+        print(grid.value)
         print()
 
 
-    # Call to LivePlot function in visualize.py file with grid, i and repeatHillclimber
-    vs.live_plot(grid, i, repeatHillclimber)
+        # Call to LivePlot function in visualize.py file with grid, i and repeatHillclimber
+        vs.live_plot(grid, i, repeatHillclimber)
     # Call to Writers functions
     writeHousesToFile()
     writeWaterbodiesToFile()

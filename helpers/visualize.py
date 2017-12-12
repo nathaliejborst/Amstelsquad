@@ -18,7 +18,7 @@ def plot_houses(grid):
     # Declare area
     plt.axis([0, grid.areaWidth, 0, grid.areaHeight])
     plt.gca().set_aspect('equal', adjustable='box')
-    plt.gca().set_title('Amstelhaege €{:,}'.format(grid.value),
+    plt.gca().set_title('Amstelhaege €{:,}'.format(round(grid.value, 2)),
                         fontweight="bold")
     plt.legend(handles=[maison_label, bungalow_label, family_label,
                water_label], bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.,

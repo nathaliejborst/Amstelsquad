@@ -23,7 +23,7 @@ class Grid:
         for house in self.housesList:
             value += house.value
             value += (house.extraFreespace - house.freespace) * house.valueUpdate * house.value
-        self.value = value
+        self.value = round(value, 2)
         return self.value
 
 
