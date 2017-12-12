@@ -3,7 +3,7 @@ import numpy as np
 import math
 
 # Set the area variant
-areaVariant = 3
+areaVariant = 1
 
 
 '''Grid class'''

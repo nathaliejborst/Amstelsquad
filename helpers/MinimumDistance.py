@@ -100,22 +100,7 @@ def getMinimum(house, grid):
 def addExtraFreespace(house, grid):
     # Get minimum distance and nr of that house in the houses[]-list
     minimumDistance, position = getMinimum(house, grid)
-    # Return amount of decimalpoints
-    decimalPointsOfMinimum = str(minimumDistance)[::-1].find('.')
-
-    # Make sure water has no freespace
-    if house.freespace is not 0:
-        # If minimum has more than 2 decimalpoints, then distance if calculated using Pythagoras
-        if (decimalPointsOfMinimum > 2):
-            # Take the smallest distance as largest5 possible freespace
-            if house.distanceToOthers[position]['x'] < house.distanceToOthers[position]['y']:
-                house.extraFreespace = house.distanceToOthers[position]['y']
-            else:
-                house.extraFreespace = house.distanceToOthers[position]['x']
-        else:
-            house.extraFreespace = minimumDistance
-    else:
-        house.extraFreespace = 0
+    house.extraFreespace = minimumDistance
 
 
 '''moveHouse function'''

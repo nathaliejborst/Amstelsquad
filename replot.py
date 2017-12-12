@@ -62,6 +62,7 @@ for i in range(len(importedHousesList)):
         familyHouse.x = float(importedHousesList[i]['x'])
         familyHouse.y = float(importedHousesList[i]['y'])
         familyHouse.position = i
+        houseType.status = 'placed'
         # print("fh: {}".format(importedHousesList[0]['x']))
         grid.housesList.append(familyHouse)
     # Bungalow
@@ -71,6 +72,7 @@ for i in range(len(importedHousesList)):
         bungalow.x = float(importedHousesList[i]['x'])
         bungalow.y = float(importedHousesList[i]['y'])
         bungalow.position = i
+        houseType.status = 'placed'
         # print("bungalow: {}".format(importedHousesList[0]['x']))
         grid.housesList.append(bungalow)
     # Maison
@@ -80,6 +82,7 @@ for i in range(len(importedHousesList)):
         maison.x = float(importedHousesList[i]['x'])
         maison.y = float(importedHousesList[i]['y'])
         maison.position = i
+        houseType.status = 'placed'
         # print("maison: {}".format(importedHousesList[0]['x']))
         grid.housesList.append(maison)
 

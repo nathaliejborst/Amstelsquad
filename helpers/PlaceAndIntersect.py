@@ -2,6 +2,7 @@
 import numpy as np
 from shapely.geometry import Polygon
 from helpers import MinimumDistance as md
+from helpers import visualize as vs
 
 # Amount of times it tries to place a house at the waterside
 trialTimes = 100
@@ -162,13 +163,19 @@ def placeHouse(houseType, grid):
 
 # Place first maison manually in the corner of the grid
 def placeFirstMaison(houseType, grid):
-    houseType.x = np.random.randint(low=houseType.freespace, high=grid.areaWidth -
-                          houseType.freespace - houseType.width)
-    houseType.y = np.random.randint(low=houseType.freespace,
-                          high=grid.areaHeight - houseType.freespace -
-                          houseType.height)
-    houseType.color = 'red'
+    # Declare true at first, because it has to place a house.
+    intersect = True
 
+    # Keeps trying to place a house until it does not intersect with another house anymore.
+    while intersect is True:
+        houseType.x = np.random.randint(low=houseType.freespace, high=grid.areaWidth -
+                              houseType.freespace - houseType.width)
+        houseType.y = np.random.randint(low=houseType.freespace,
+                              high=grid.areaHeight - houseType.freespace -
+                              houseType.height)
+        intersect = intersectWater(houseType, grid)
+
+    houseType.color = 'red'
     houseType.position = len(grid.housesList)
     houseType.status = 'placed'
     grid.housesList.append(houseType)
@@ -225,3 +232,41 @@ def intersectHouse(houseType, grid):
 def moveHouse(houseType, grid):
     placeHouse(houseType, grid)
     md.moveHouse(houseType, grid)
+
+
+# Swaps coordinates of two houses
+def swapCoordinates(house0, house1):
+    temp_x = house0.x
+    temp_y = house0.y
+
+    house0.x = house1.x
+    house0.y = house1.y
+
+    house1.x = temp_x
+    house1.y = temp_y
+
+def swapHouse(houseType, grid, oldValue):
+    # Check if houses fit on each other's position in the grid
+    for house in grid.housesList:
+        # Swap coordinates of both houses and calculate new freespace and value
+        swapCoordinates(houseType, house)
+        md.adjustFreespace(grid)
+        grid.totalValue()
+
+        intersect = True
+        if intersectWater(houseType, grid) is False and intersectWater(house, grid) is False:
+            if intersectHouse(houseType, grid) is False and intersectHouse(house, grid) is False:
+                if grid.value > oldValue:
+                    grid.totalValue()
+                    oldValue = grid.value
+                    print(" !! better: {}".format(grid.value))
+                else:
+                    swapCoordinates(house, houseType)
+                    md.adjustFreespace(grid)
+                    grid.totalValue()
+            # If houses intersect, swap houses back to old position
+            else:
+                swapCoordinates(house, houseType)
+                md.adjustFreespace(grid)
+                grid.totalValue()
+    return oldValue

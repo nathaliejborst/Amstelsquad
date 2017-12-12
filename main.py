@@ -81,21 +81,21 @@ for bungalows in range(amountOfBungalows):
     bungalow = cl.House(width=10, height=7.5, freespace=3, value=399000,
                         valueUpdate=0.04, color='orange')
     # Tries to place house at the waterside, else places it random in the grid (no priority: call pai.placeHouse() instead)
-    pai.placeHouseWithWatersidePriority(bungalow, grid)
+    pai.placeHouse(bungalow, grid)
 
 # Place maisons
 for maisons in range(amountOfMaisons):
     maison = cl.House(width=11, height=10.5, freespace=6, value=610000,
                       valueUpdate=0.06, color='red')
     # Tries to place house at the waterside, else places it random in the grid (no priority: call pai.placeHouse() instead)
-    pai.placeHouseWithWatersidePriority(maison, grid)
+    pai.placeHouse(maison, grid)
 
 # Place familyhouses
 for familyHouses in range(amountOfFamilyHouses):
     familyHouse = cl.House(width=8, height=8, freespace=2, value=285000,
                            valueUpdate=0.03, color='yellow')
     # Tries to place house at the waterside, else places it random in the grid (no priority: call pai.placeHouse() instead)
-    pai.placeHouseWithWatersidePriority(familyHouse, grid)
+    pai.placeHouse(familyHouse, grid)
 
 # Call to MinimumDistance.py file with grid for add extra freespace
 md.addExtraFreespaceToAllHouse(grid)
@@ -107,21 +107,13 @@ print("Total runtime: {}".format(datetime.now() - startTime))
 # The total value of the grid
 grid.totalValue()
 
-
-# for house in grid.housesList:
-#     pai.moveHouse(house, grid)
-#     grid.totalValue()
-#     if house.position % 5 is 0:
-#         vs.PlotHouses(grid)
-#         print(grid.value)
-
 # Reposition number of houses per try and repeat number of Hillclimber
-repositionHouse = 2
+repositionHouse = 10
 repeatHillclimber = 10
 
 # Hillclimber function
 vs.plot_houses(grid)
-temp_value = grid.value
+oldValue = grid.value
 for i in range(repeatHillclimber):
     print(i)                                        # Printstatement for number of repeatHillclimber rounds
     for house in grid.housesList:
@@ -129,15 +121,21 @@ for i in range(repeatHillclimber):
             temp_x = house.x
             temp_y = house.y
             pai.moveHouse(house, grid)              # Moves house and adjusts freespace for all houses
-            if grid.totalValue() >= temp_value:
-                temp_value = grid.totalValue()
+            if grid.totalValue() >= oldValue:
+                print("moved: {}".format(grid.value))
+                oldValue = grid.totalValue()
             else:                                   # Doesn't move house if value didn't increase so gives it back it's old coordinates
                 house.x = temp_x
                 house.y = temp_y
-                grid.value = temp_value             # Adjust new highest value in grid
+                grid.value = oldValue           # Adjust new highest value in grid
                 md.adjustFreespace(grid)            # Adjusts freespace for all houses
-        print(grid.value)
+                # print("before swap: {}".format(grid.value))
+                oldValue = pai.swapHouse(house, grid, oldValue)
+                print(grid.value)
+
+        # print(grid.value)
         print()
+
 
     # Call to LivePlot function in visualize.py file with grid, i and repeatHillclimber
     vs.live_plot(grid, i, repeatHillclimber)
