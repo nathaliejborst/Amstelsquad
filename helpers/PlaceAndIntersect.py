@@ -3,6 +3,7 @@ import numpy as np
 from shapely.geometry import Polygon
 from helpers import MinimumDistance as md
 from helpers import visualize as vs
+from helpers import classes as cl
 
 # Amount of times it tries to place a house at the waterside
 trialTimes = 100
@@ -269,4 +270,42 @@ def swapHouse(houseType, grid, oldValue):
                 swapCoordinates(house, houseType)
                 md.adjustFreespace(grid)
                 grid.totalValue()
-    return oldValue
+        else:
+            swapCoordinates(house, houseType)
+            md.adjustFreespace(grid)
+            grid.totalValue()
+    return oldValue, grid
+
+def trySwappingMaisons(grid):
+    oldValue = grid.totalValue()
+    print(oldValue)
+
+    amountOfMaisons = 3 * cl.areaVariant
+    for i in range(amountOfMaisons):
+        for house in grid.housesList:
+            swapCoordinates(grid.housesList[i], house)
+            md.adjustFreespace(grid)
+            grid.totalValue()
+
+
+            intersect = True
+            if intersectWater(grid.housesList[i], grid) is False and intersectWater(house, grid) is False:
+                if intersectHouse(grid.housesList[i], grid) is False and intersectHouse(house, grid) is False:
+                    if grid.value > oldValue:
+                        grid.totalValue()
+                        oldValue = grid.value
+                    if grid.value <= oldValue:
+                        print("worse: {} < {}".format(grid.value, oldValue))
+                        swapCoordinates(house, grid.housesList[i])
+                        md.adjustFreespace(grid)
+                        grid.totalValue()
+                # If houses intersect, swap houses back to old position
+                else:
+                    swapCoordinates(house, grid.housesList[i])
+                    md.adjustFreespace(grid)
+                    grid.totalValue()
+
+            else:
+                swapCoordinates(house, grid.housesList[i])
+                md.adjustFreespace(grid)
+                grid.totalValue()

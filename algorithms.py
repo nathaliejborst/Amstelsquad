@@ -36,25 +36,28 @@ def swapHouses(swapHouseCounter, oldValue, house, grid):
     swapHouseLevel = 150
     swapHouseCounter += 1
     if swapHouseCounter > swapHouseLevel:
-        oldValue = pai.swapHouse(house, grid, oldValue)
+        oldValue, grid = pai.swapHouse(house, grid, oldValue)
         swapHouseCounter = 0
+        # print("     swapped house: {}".format(grid.totalValue()))
     return swapHouseCounter, oldValue
 
-def simulatedAnnealing(grid, newValue, oldValue, iteration, temperature):
-    # temperature = 1000
-    coolingRate = 0.008 * (1 + (((iteration * 30 )/ len(grid.housesList))/3000))
+def simulatedAnnealing(grid, newValue, oldValue, iteration, temperature, totalIterations):
+    oldTemperature = temperature
+    endTemperature = 0
+    coolingRate = 0.01
 
-    # print("temp: {}  >> coolingrate: {}".format(temperature, coolingRate))
     # Calculate acceptance probability
     acceptanceProbability = math.exp((newValue - oldValue) / temperature)
-    # print("  prob: {}".format(acceptanceProbability))
 
+    # Adjust to new temperature
     temperature *= 1 - coolingRate
 
-    # accept deterioration
+    # reject deterioration
     if acceptanceProbability < random.random():
+        print("   {}".format(acceptanceProbability))
         # put house back in place
         return False, temperature
+    # accept deterioration
     else:
         print("accepted: prob({}), old: {}, new: {}  > temperature: {}".format(acceptanceProbability, oldValue, newValue, temperature))
         return True, temperature
@@ -65,8 +68,8 @@ def improveValue(grid, chosenAlgorithm, repeatAlgorithm):
     swapHouseCounter = 0
     temperature = 1000000
     iteration = 0
+    totalIterations = repeatAlgorithm * len(grid.housesList) * repositionHouse
 
-    print(repeatAlgorithm)
     vs.plot_houses(grid)
     oldValue = grid.value
     for i in range(repeatAlgorithm):
@@ -80,36 +83,38 @@ def improveValue(grid, chosenAlgorithm, repeatAlgorithm):
                 if grid.totalValue() >= oldValue:
                     swapHouseCounter = 0
                     oldValue = grid.totalValue()
-                else:                                   # Doesn't move house if value didn't increase so gives it back it's old coordinates
-                    # house.x = temp_x
-                    # house.y = temp_y
-                    # grid.value = oldValue               # Adjust new highest value in grid
-                    # md.adjustFreespace(grid)            # Adjusts freespace for all houses
-                    # Hillclimber algrorithm moves house back to old position if value hasn't improved
-
+                    print("improved: {}".format(grid.value))
+                # Doesn't move house if value didn't increase so gives it back it's old coordinates
+                else:
                     if chosenAlgorithm is 1:
                         # Hillclimber puts house back at old position if value hasn't improved
                         hillClimber(house, grid, oldValue, temp_x, temp_y)
                     if chosenAlgorithm is 2:
                         # the swap house function tries swapping a house with all the other houses to improve value
-                        swapHouseCounter, oldValue = swapHouses(swapHouseCounter, oldValue, house, grid)
+                        hillClimber(house, grid, oldValue, temp_x, temp_y)
+                        swapHouseCounter, oldValue, grid = swapHouses(swapHouseCounter, oldValue, house, grid)
+                        grid.totalValue()
                     # Put house back in old position if the simulated annealing algrorithm does not accept deterioration
                     if chosenAlgorithm is 3:
-                        accept, temperature = simulatedAnnealing(grid, grid.value, oldValue, iteration, temperature)
+                        accept, temperature = simulatedAnnealing(grid, grid.value, oldValue, iteration, temperature, totalIterations)
                         if accept is False:
                             hillClimber(house, grid, oldValue, temp_x, temp_y)
                     # Implements simulated annealing but if the algorithm does not accept deterioration try to swap the house
                     if chosenAlgorithm is 4:
-                        accept, temperature = simulatedAnnealing(grid, grid.value, oldValue, iteration, temperature)
+                        accept, temperature = simulatedAnnealing(grid, grid.value, oldValue, iteration, temperature, totalIterations)
                         if accept is False:
                             hillClimber(house, grid, oldValue, temp_x, temp_y)
-                        else:
                             swapHouseCounter, oldValue = swapHouses(swapHouseCounter, oldValue, house, grid)
-            print(grid.value)
+            # print(grid.value)
             print()
         # Call to LivePlot function in visualize.py file with grid, i and repeatHillclimber
         vs.live_plot(grid, i, repeatAlgorithm)
-    # Call to Writers functions
+    pai.trySwappingMaisons(grid)
+    grid.totalValue()
+    print("!!! {} !!!".format(grid.value))
+    vs.plot_houses(grid)
+
+    Call to Writers functions
     while True:
         saveGrid = input("Save grid? (Y/N): ")
         if saveGrid == 'Y':

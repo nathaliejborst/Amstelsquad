@@ -11,31 +11,36 @@ from helpers import visualize as vs
 from helpers import MinimumDistance as md
 from helpers import PlaceAndIntersect as pai
 from helpers import filewriter as fw
+import algorithms as al
 import csv
 
 def userAreaVariantInput():
     while True:
         try:
             areaVariant = int(input("Area variant (nr. between 1 to 3): "))
-            print("[1: Hillclimber]")
-            chooseAlgo = int(input("Choose an algrorithm: "))
-            if chooseAlgo is 1:
-                repeatHillclimber = int(input("Repeat hillclimber: "))
-                repositionHouse =  int(input(" > Reposition 1 house: "))
+            print(" 1: Hillclimber")
+            print(" 2: Hillclimber combined with swap houses")
+            print(" 3: Simulated annealing")
+            print(" 4: Combine all")
+            chosenAlgorithm = int(input("Choose an algrorithm: "))
+            repeatAlgorithm = int(input("How many times repeat the algorithm?: "))
+            # if chooseAlgo is 1:
+            #     repeatHillclimber = int(input("Repeat hillclimber: "))
+            #     repositionHouse =  int(input(" > Reposition 1 house: "))
         except ValueError:
             print("   This is not a whole number.")
             continue
-        if areaVariant < 1 or areaVariant > 3:
+        if areaVariant < 1 or areaVariant > 3 or chosenAlgorithm < 1 or chosenAlgorithm > 4:
             print("   Please enter a number between 1 to 3")
             continue
-        if repeatHillclimber < 1 or repositionHouse < 1:
-            print("   Please enter a positive number")
-            continue
+        # if repeatHillclimber < 1 or repositionHouse < 1:
+        #     print("   Please enter a positive number")
+        #     continue
         else:
-            return areaVariant, repeatHillclimber, repositionHouse
+            return areaVariant, chosenAlgorithm, repeatAlgorithm
             break
 
-cl.areaVariant, repeatHillclimber, repositionHouse = userAreaVariantInput()
+cl.areaVariant, chosenAlgorithm, repeatAlgorithm = userAreaVariantInput()
 
 def writeHousesToFile():
     with open('coordinatesHouses.csv', 'w', newline='') as filewriter:
@@ -103,21 +108,21 @@ for bungalows in range(amountOfBungalows):
     bungalow = cl.House(width=10, height=7.5, freespace=3, value=399000,
                         valueUpdate=0.04, color='orange')
     # Tries to place house at the waterside, else places it random in the grid (no priority: call pai.placeHouse() instead)
-    pai.placeHouse(bungalow, grid)
+    pai.placeHouseWithWatersidePriority(bungalow, grid)
 
 # Place maisons
 for maisons in range(amountOfMaisons):
     maison = cl.House(width=11, height=10.5, freespace=6, value=610000,
                       valueUpdate=0.06, color='red')
     # Tries to place house at the waterside, else places it random in the grid (no priority: call pai.placeHouse() instead)
-    pai.placeHouse(maison, grid)
+    pai.placeHouseWithWatersidePriority(maison, grid)
 
 # Place familyhouses
 for familyHouses in range(amountOfFamilyHouses):
     familyHouse = cl.House(width=8, height=8, freespace=2, value=285000,
                            valueUpdate=0.03, color='yellow')
     # Tries to place house at the waterside, else places it random in the grid (no priority: call pai.placeHouse() instead)
-    pai.placeHouse(familyHouse, grid)
+    pai.placeHouseWithWatersidePriority(familyHouse, grid)
 
 # Call to MinimumDistance.py file with grid for add extra freespace
 md.addExtraFreespaceToAllHouse(grid)
@@ -130,36 +135,39 @@ print("Total runtime: {}".format(datetime.now() - startTime))
 grid.totalValue()
 
 # Reposition number of houses per try and repeat number of Hillclimber
-repositionHouse = 10
-repeatHillclimber = 10
+# repositionHouse = 10
+# repeatHillclimber = 10
 
 # Hillclimber function
-vs.plot_houses(grid)
-oldValue = grid.value
-for i in range(repeatHillclimber):
-    print(i)                                        # Printstatement for number of repeatHillclimber rounds
-    for house in grid.housesList:
-        for j in range(repositionHouse):            # Store x and y coordinates in temporary values if algrorithm can't find a better position to increase value
-            temp_x = house.x
-            temp_y = house.y
-            pai.moveHouse(house, grid)              # Moves house and adjusts freespace for all houses
-            if grid.totalValue() >= oldValue:
-                oldValue = grid.totalValue()
-            else:                                   # Doesn't move house if value didn't increase so gives it back it's old coordinates
-                house.x = temp_x
-                house.y = temp_y
-                grid.value = oldValue               # Adjust new highest value in grid
-                md.adjustFreespace(grid)            # Adjusts freespace for all houses
-                oldValue = pai.swapHouse(house, grid, oldValue)
-        print(grid.value)
-        print()
+# vs.plot_houses(grid)
+# oldValue = grid.value
+# for i in range(repeatHillclimber):
+#     print(i)                                        # Printstatement for number of repeatHillclimber rounds
+#     for house in grid.housesList:
+#         for j in range(repositionHouse):            # Store x and y coordinates in temporary values if algrorithm can't find a better position to increase value
+#             temp_x = house.x
+#             temp_y = house.y
+#             pai.moveHouse(house, grid)              # Moves house and adjusts freespace for all houses
+#             if grid.totalValue() >= oldValue:
+#                 oldValue = grid.totalValue()
+#             else:                                   # Doesn't move house if value didn't increase so gives it back it's old coordinates
+#                 house.x = temp_x
+#                 house.y = temp_y
+#                 grid.value = oldValue               # Adjust new highest value in grid
+#                 md.adjustFreespace(grid)            # Adjusts freespace for all houses
+#                 oldValue = pai.swapHouse(house, grid, oldValue)
+#         print(grid.value)
+#         print()
+#
+#
+#         # Call to LivePlot function in visualize.py file with grid, i and repeatHillclimber
+#         vs.live_plot(grid, i, repeatHillclimber)
+#     # Call to Writers functions
+#     writeHousesToFile()
+#     writeWaterbodiesToFile()
 
 
-        # Call to LivePlot function in visualize.py file with grid, i and repeatHillclimber
-        vs.live_plot(grid, i, repeatHillclimber)
-    # Call to Writers functions
-    writeHousesToFile()
-    writeWaterbodiesToFile()
+al.improveValue(grid, chosenAlgorithm, repeatAlgorithm)
 
 # Call to saveValue function in filewriter.py file with grid.value
 fw.saveValue(grid.value)
