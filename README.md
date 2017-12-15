@@ -3,11 +3,11 @@
 This program offers the possibility to plot a map with three housevariants (20 houses, 40 houses, 60 houses) at the request of the municipality for the new district Amstelhaege. The value of a map is the sum of all houses in the neighborhood including the number of meters of free standing per house. Thereby an attempt is made to realize a maximum value and a maximum free standing. Surface water is also added and there are three different houses, namely single-family homes, bungalows and maisonettes.
 
 ## Example Visualisation
-![alt text](https://raw.githubusercontent.com/nathaliejborst/Amstelsquad/master/visualisations/GroupedHouses_1000Hillclimbs.png?token=AeMG2ijmMDfv-IDoI4muEbmDjO7pPl1Nks5aM5KgwA%3D%3D)
+![alt text](https://raw.githubusercontent.com/nathaliejborst/Amstelsquad/master/visualisations/GroupedHouses_1000Hillclimbs.png?token=AWTZAv3Bvz-JJFMI7wGaeB4PpJYSutHRks5aPPgrwA%3D%3D)
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. 
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
 ### Prerequisites
 
@@ -68,9 +68,9 @@ $ Command C
 
 ### State-Space
 
-On a grid of 156 by 176 gives 27.456 'blocks' can be placed somewhere. In reality, the plotting of houses is lower since this number applies to the smallest house. Next to that, no account is taken of water and of already placed houses. The State-space is as maximum 27.456 per house. 
+On a grid of 156 by 176 gives 27.456 'blocks' can be placed somewhere. In reality, the plotting of houses is lower since this number applies to the smallest house. Next to that, no account is taken of water and of already placed houses. The State-space is as maximum 27.456 per house.
 
-A more specific calculation is with half meters. On a grid of 156 by 176, there are twice (312 * 352) possibilities to place a smaller house. That are 109.824 possibilities for the smallest house. 
+A more specific calculation is with half meters. On a grid of 156 by 176, there are twice (312 * 352) possibilities to place a smaller house. That are 109.824 possibilities for the smallest house.
 
 (154 * 174)^2 = 308 * 348 = 107.184 (bungalow)
 (148 * 168)^2 = 296 * 336 = 99.456 (maison)
@@ -98,7 +98,7 @@ When there is a non discrete possibility to place houses (float), the asymptote 
 ### Upper- and Lower-Bound Value
 The maximum value is: 36 * 285.000 + 15 * 399.000 + 9 * 610.000 = 10.260.000 + 5.985.000 + 5.490.000 = 21.735.000
 
-The space already taken from the grid (180*160= 28.800 ) = 36*(10*10) + 15*(13*10,5) + 9*(17*16,5) = 3600 + 2047,5 + 2524,5 = 8172 + water (160*180*0,2=5760) = 13.932. Total grid minus already taken space = 28.800 - 13.932 = 14.868 is available for freespace. 
+The space already taken from the grid (180*160= 28.800 ) = 36*(10*10) + 15*(13*10,5) + 9*(17*16,5) = 3600 + 2047,5 + 2524,5 = 8172 + water (160*180*0,2=5760) = 13.932. Total grid minus already taken space = 28.800 - 13.932 = 14.868 is available for freespace.
 
 Freespace could overlap max 4 times, so 4 times the most expensive freespace. 4 * (610.000 * 0.06) =  4 * 36.600 = 146.400 / 34,5 = 4.243,48~ per square meter (this number is only true by the first extra meter of a maison).  
 
@@ -106,7 +106,7 @@ Freespace could overlap max 4 times, so 4 times the most expensive freespace. 4 
 
 21.735.000 + 63.092.034,8 = 84.827.034,8~
 
-84.827.034,8~ is an estimate of the absolute maximum of the value of Amstelhaege. 
+84.827.034,8~ is an estimate of the absolute maximum of the value of Amstelhaege.
 
 
 
@@ -134,7 +134,7 @@ The minimum value is: 12 * 285.000 + 5 * 399.000 + 3 * 610.000 = 3.420.000 + 1.9
 
 ## Versioning
 
-For the versions available, see the [commits on this repository](https://github.com/nathaliejborst/Amstelsquad/commits/master). 
+For the versions available, see the [commits on this repository](https://github.com/nathaliejborst/Amstelsquad/commits/master).
 
 ## Authors
 
@@ -144,9 +144,9 @@ For the versions available, see the [commits on this repository](https://github.
 
 See also the list of [contributors](https://github.com/nathaliejborst/Amstelsquad/graphs/contributors) who participated in this project.
 
-Also thanks to 
+Also thanks to
 **Bart van Baal** - [BartvBaal](https://github.com/BartvBaal)
-for assisting us. 
+for assisting us.
 
 ## License
 
