@@ -11,7 +11,7 @@ from helpers import visualize as vs
 from helpers import MinimumDistance as md
 from helpers import PlaceAndIntersect as pai
 from helpers import filewriter as fw
-import algorithms as al
+from helpers import algorithms as al
 import csv
 
 def userAreaVariantInput():
@@ -41,21 +41,6 @@ def userAreaVariantInput():
             break
 
 cl.areaVariant, chosenAlgorithm, repeatAlgorithm = userAreaVariantInput()
-
-def writeHousesToFile():
-    with open('coordinatesHouses.csv', 'w', newline='') as filewriter:
-        fieldnames = ['x', 'y', 'width', 'value']
-        writer = csv.DictWriter(filewriter, fieldnames=fieldnames)
-        writer.writerow({'value': grid.value})
-        for house in grid.housesList:
-            writer.writerow({'x': house.x, 'y': house.y, 'width': house.width})
-
-def writeWaterbodiesToFile():
-    with open('coordinatesWaterbodies.csv', 'w', newline='') as filewriter:
-        fieldnames = ['x', 'y', 'width', 'height']
-        writer = csv.DictWriter(filewriter, fieldnames=fieldnames)
-        for body in grid.waterBodiesList:
-            writer.writerow({'x': body.x, 'y': body.y, 'width': body.width, 'height': body.height})
 
 # DateTime runner
 startTime = datetime.now()
@@ -133,39 +118,6 @@ print("Total runtime: {}".format(datetime.now() - startTime))
 
 # The total value of the grid
 grid.totalValue()
-
-# Reposition number of houses per try and repeat number of Hillclimber
-# repositionHouse = 10
-# repeatHillclimber = 10
-
-# Hillclimber function
-# vs.plot_houses(grid)
-# oldValue = grid.value
-# for i in range(repeatHillclimber):
-#     print(i)                                        # Printstatement for number of repeatHillclimber rounds
-#     for house in grid.housesList:
-#         for j in range(repositionHouse):            # Store x and y coordinates in temporary values if algrorithm can't find a better position to increase value
-#             temp_x = house.x
-#             temp_y = house.y
-#             pai.moveHouse(house, grid)              # Moves house and adjusts freespace for all houses
-#             if grid.totalValue() >= oldValue:
-#                 oldValue = grid.totalValue()
-#             else:                                   # Doesn't move house if value didn't increase so gives it back it's old coordinates
-#                 house.x = temp_x
-#                 house.y = temp_y
-#                 grid.value = oldValue               # Adjust new highest value in grid
-#                 md.adjustFreespace(grid)            # Adjusts freespace for all houses
-#                 oldValue = pai.swapHouse(house, grid, oldValue)
-#         print(grid.value)
-#         print()
-#
-#
-#         # Call to LivePlot function in visualize.py file with grid, i and repeatHillclimber
-#         vs.live_plot(grid, i, repeatHillclimber)
-#     # Call to Writers functions
-#     writeHousesToFile()
-#     writeWaterbodiesToFile()
-
 
 al.improveValue(grid, chosenAlgorithm, repeatAlgorithm)
 

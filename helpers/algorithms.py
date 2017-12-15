@@ -8,7 +8,6 @@ import csv
 import random
 import math
 
-# temperature = 1000
 repositionHouse = 15
 
 def writeHousesToFile(grid):
@@ -32,8 +31,8 @@ def hillClimber(house, grid, oldValue, temp_x, temp_y):
     grid.value = oldValue               # Adjust new highest value in grid
     md.adjustFreespace(grid)            # Adjusts freespace for all houses
 
-def swapHouses(swapHouseCounter, oldValue, house, grid):
-    swapHouseLevel = 150
+def swapHouses(swapHouseCounter, oldValue, house, grid, swapHouseLevel):
+    # swapHouseLevel = 150
     swapHouseCounter += 1
     if swapHouseCounter > swapHouseLevel:
         oldValue, grid = pai.swapHouse(house, grid, oldValue)
@@ -42,30 +41,35 @@ def swapHouses(swapHouseCounter, oldValue, house, grid):
     return swapHouseCounter, oldValue
 
 def simulatedAnnealing(grid, newValue, oldValue, iteration, temperature, totalIterations):
-    oldTemperature = temperature
-    endTemperature = 0
-    coolingRate = 0.01
+    if temperature > 0:
+        oldTemperature = temperature
+        endTemperature = 0
+        coolingRate = 0.01
 
-    # Calculate acceptance probability
-    acceptanceProbability = math.exp((newValue - oldValue) / temperature)
+        # Calculate acceptance probability
+        acceptanceProbability = math.exp((newValue - oldValue) / temperature)
 
-    # Adjust to new temperature
-    temperature *= 1 - coolingRate
+        # Adjust to new temperature
+        # temperature *= 1 - coolingRate
+        temperature = oldTemperature - (iteration * (oldTemperature - endTemperature) / totalIterations)
 
-    # reject deterioration
-    if acceptanceProbability < random.random():
-        print("   {}".format(acceptanceProbability))
-        # put house back in place
-        return False, temperature
-    # accept deterioration
+        # reject deterioration
+        if acceptanceProbability < random.random():
+            print("   {}".format(acceptanceProbability))
+            # put house back in place
+            return False, temperature
+        # accept deterioration
+        else:
+            print("accepted: prob({}), old: {}, new: {}  > temperature: {}".format(acceptanceProbability, oldValue, newValue, temperature))
+            return True, temperature
     else:
-        print("accepted: prob({}), old: {}, new: {}  > temperature: {}".format(acceptanceProbability, oldValue, newValue, temperature))
-        return True, temperature
+        return False, temperature
 
 
 
 def improveValue(grid, chosenAlgorithm, repeatAlgorithm):
     swapHouseCounter = 0
+    swapHouseLevel = 150
     temperature = 1000000
     iteration = 0
     totalIterations = repeatAlgorithm * len(grid.housesList) * repositionHouse
@@ -92,7 +96,7 @@ def improveValue(grid, chosenAlgorithm, repeatAlgorithm):
                     if chosenAlgorithm is 2:
                         # the swap house function tries swapping a house with all the other houses to improve value
                         hillClimber(house, grid, oldValue, temp_x, temp_y)
-                        swapHouseCounter, oldValue, grid = swapHouses(swapHouseCounter, oldValue, house, grid)
+                        swapHouseCounter, oldValue = swapHouses(swapHouseCounter, oldValue, house, grid, swapHouseLevel)
                         grid.totalValue()
                     # Put house back in old position if the simulated annealing algrorithm does not accept deterioration
                     if chosenAlgorithm is 3:
@@ -104,7 +108,7 @@ def improveValue(grid, chosenAlgorithm, repeatAlgorithm):
                         accept, temperature = simulatedAnnealing(grid, grid.value, oldValue, iteration, temperature, totalIterations)
                         if accept is False:
                             hillClimber(house, grid, oldValue, temp_x, temp_y)
-                            swapHouseCounter, oldValue = swapHouses(swapHouseCounter, oldValue, house, grid)
+                            swapHouseCounter, oldValue = swapHouses(swapHouseCounter, oldValue, house, grid, 0)
             # print(grid.value)
             print()
         # Call to LivePlot function in visualize.py file with grid, i and repeatHillclimber
@@ -112,9 +116,10 @@ def improveValue(grid, chosenAlgorithm, repeatAlgorithm):
     pai.trySwappingMaisons(grid)
     grid.totalValue()
     print("!!! {} !!!".format(grid.value))
+    print(totalIterations)
     vs.plot_houses(grid)
 
-    Call to Writers functions
+    # Call to Writers functions
     while True:
         saveGrid = input("Save grid? (Y/N): ")
         if saveGrid == 'Y':
