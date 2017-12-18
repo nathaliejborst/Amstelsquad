@@ -9,7 +9,7 @@ This program offers the possibility to plot a map with three housevariants (20 h
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
 
-### Prerequisites
+### Prerequisites (extern libraries)
 
 * Python 3
 * Numpy
