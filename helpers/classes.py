@@ -42,7 +42,6 @@ class House:
         self.extraFreespace = extraFreespace
         self.status = 'not placed'
         self.position = None
-        self.positionNearestHouse = None
 
     def area(self):
         return self.width * self.height

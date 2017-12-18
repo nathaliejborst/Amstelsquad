@@ -57,15 +57,11 @@ def simulatedAnnealing(grid, newValue, oldValue, iteration, temperature,
 
         # Reject deterioration.
         if acceptanceProbability < random.random():
-            print("   {}".format(acceptanceProbability))
             # Put house back in place.
             return False, temperature
 
         # Accept deterioration.
         else:
-            print("accepted: prob({}), old: {}, new: {}  > \
-                  temperature: {}".format(acceptanceProbability, oldValue,
-                                          newValue, temperature))
             return True, temperature
 
     # Reject deterioration if temperature is not higher then zero.
@@ -108,7 +104,7 @@ def improveValue(grid, chosenAlgorithm, repeatAlgorithm):
                 if grid.totalValue() >= oldValue:
                     swapHouseCounter = 0
                     oldValue = grid.totalValue()
-                    print("   Improved: €{:,}".format(grid.value))
+                    print("   Improved: €{:,}".format(grid.totalValue()))
 
                 # Doesn't move house if value didn't increase
                 # so gives it back it's old coordinates.

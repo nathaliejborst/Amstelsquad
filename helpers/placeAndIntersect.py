@@ -139,9 +139,7 @@ def placeHouse(houseType, grid):
 
     # Place house on grid if it doesn't intersect with water or another house.
     if intersect is False:
-        if houseType.status == 'placed':
-            m = 0
-        else:
+        if houseType.status == 'not placed':
             houseType.position = len(grid.housesList)
             houseType.status = 'placed'
             grid.housesList.append(houseType)
@@ -239,7 +237,6 @@ def swapHouse(houseType, grid, oldValue):
                 if grid.value > oldValue:
                     grid.totalValue()
                     oldValue = grid.value
-                    print(" !! better: {}".format(grid.value))
                 else:
                     swapCoordinates(house, houseType)
                     md.adjustFreespace(grid)
