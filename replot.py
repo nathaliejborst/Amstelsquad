@@ -35,6 +35,9 @@ with open('coordinatesWaterbodies.csv') as csvfile:
             {'x': row[0], 'y': row[1], 'width': row[2], 'height': row[3]}
         importedWaterbodiesList.append(bodyCoordinates)
 
+# Declare areaVariant by length of house list devided by 20.
+cl.areaVariant = int(len(importedHousesList) / 20)
+
 # Set readed water in classes file.
 for i in range(len(importedWaterbodiesList)):
     water = cl.Water()
