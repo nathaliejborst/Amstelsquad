@@ -72,13 +72,13 @@ waterX = [18]
 waterY = [20]
 
 # Declaration of the number of elements in grid according to area variant.
-# Maisons minus 1, because first maison is placed manually.
+# Maisons minus 1, because first maison is placed seperately.
 amountOfMaisons = (3 * cl.areaVariant) - 1
 amountOfBungalows = 5 * cl.areaVariant
 amountOfFamilyHouses = 12 * cl.areaVariant
 amountOfWater = len(waterWidth)
 
-# Place water to the grid.
+# Place water on the grid.
 for i in range(amountOfWater):
     water = cl.Water()
     water.width = waterWidth[i]
