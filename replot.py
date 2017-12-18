@@ -5,7 +5,7 @@
 
 import csv
 from helpers import classes as cl
-from helpers import MinimumDistance as md
+from helpers import minimumDistance as md
 from helpers import visualize as vs
 
 # Create instance of the grid.

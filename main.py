@@ -6,8 +6,8 @@
 # helpers to run a possible solution and show a visualisation to the user.
 
 from helpers import classes as cl
-from helpers import PlaceAndIntersect as pai
-from helpers import MinimumDistance as md
+from helpers import placeAndIntersect as pai
+from helpers import minimumDistance as md
 from helpers import algorithms as al
 from helpers import filewriter as fw
 

@@ -1,8 +1,7 @@
 # Import packages and own files
 import numpy as np
 from shapely.geometry import Polygon
-from helpers import MinimumDistance as md
-from helpers import visualize as vs
+from helpers import minimumDistance as md
 from helpers import classes as cl
 
 # Amount of times it tries to place a house at the waterside
@@ -278,7 +277,6 @@ def swapHouse(houseType, grid, oldValue):
 
 def trySwappingMaisons(grid):
     oldValue = grid.totalValue()
-    print(oldValue)
 
     amountOfMaisons = 3 * cl.areaVariant
     for i in range(amountOfMaisons):
@@ -295,7 +293,7 @@ def trySwappingMaisons(grid):
                         grid.totalValue()
                         oldValue = grid.value
                     if grid.value <= oldValue:
-                        print("worse: {} < {}".format(grid.value, oldValue))
+                        print("Worse: {} < {}".format(grid.value, oldValue))
                         swapCoordinates(house, grid.housesList[i])
                         md.adjustFreespace(grid)
                         grid.totalValue()
@@ -309,3 +307,5 @@ def trySwappingMaisons(grid):
                 swapCoordinates(house, grid.housesList[i])
                 md.adjustFreespace(grid)
                 grid.totalValue()
+
+    grid.Value = oldValue

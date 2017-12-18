@@ -4,8 +4,8 @@
 # Description: Contains the algorithms.
 
 from helpers import filewriter as fw
-from helpers import MinimumDistance as md
-from helpers import PlaceAndIntersect as pai
+from helpers import minimumDistance as md
+from helpers import placeAndIntersect as pai
 from helpers import visualize as vs
 import random
 import math
