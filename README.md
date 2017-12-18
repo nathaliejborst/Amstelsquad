@@ -17,8 +17,26 @@ These instructions will get you a copy of the project up and running on your loc
 * Shapely
 
 ### Installing
+To install shapely on Windows, do the following:
 
-Mac:
+(Ctrl + )Click on the link below and download the right WHL file
+
+[link to Shapeley WHL files](https://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely)
+
+Set the right file in the right workspace, after that:
+
+
+To install all extern libraries:
+
+```
+# Install all extern libraries
+$ pip install --user -r requirements.txt
+```
+
+#### Alternative installation
+As an alternative, the following files can be installed separately:
+
+On Mac:
 ```
 # Install numpy
 $ pip install numpy
@@ -30,7 +48,7 @@ $ pip install matplotlib
 $ pip install shapely
 ```
 
-Windows:
+On Windows:
 ```
 # Install numpy
 $ pip install numpy
@@ -53,15 +71,45 @@ $ pip install shapely
 
 Type in the terminal in the correct folder where this file is stored:
 ```
-$ python amstelhaege.py
+$ python main.py
 # or
-$ python3 amstelhaege.py
+$ python3 main.py
 
-# To stop the program, the user must type the following in the terminal on Windows:
+# To stop the program, the user must type the following in the terminal:
 $ Ctrl C
 
-# To stop the program, the user must type the following in the terminal on Mac:
-$ Command C
+# To replot a grid, the user must have "coordinatesHouses.csv" and "coordinatesWaterbodies.csv" in the same directory as replot.py and must type the following:
+$ python replot.py
+# or
+$ python3 replot.py
+```
+
+An user can change areavariants and choose an algorithm in the terminal. The user can also choose an amount of repeats of the algorithm. 
+If the user wants to change amount of houses moved per iteration, the user has to type the following in algorithms.py in line 14:
+```
+# Type an integer below here instead of "amount" with the (areavariant * 20) as maximum:
+$ repositionHouse = "amount"
+```
+
+If a user wants to change the order of houses placed on the map, a user can change the order in main.py between line 94 and line 113.
+```
+# To do that, a user has to select one kind of house (6 lines of code) and place it above or below the other housevariant(s) (also 6 lines of code or 12 lines of code) as near as possible with one empty line. Below an example of 1 housevariant (6 lines of code): 
+
+$ # Place familyhouses.
+$ for familyHouses in range(amountOfFamilyHouses):
+$     familyHouse = cl.House(width=8, height=8, freespace=2, value=285000,
+$                            valueUpdate=0.03, color='yellow')
+$     # Try to place house at waterside, else place it random in grid.
+$     pai.placeHouseWithWatersidePriority(familyHouse, grid)
+```
+
+If a user want to plot the water different, a user can type in main.py between line 69 and line 72 the following:
+```
+# Type an integer in these lines, with a comma you can place more areas of water. As example, for two areas of water
+$ waterWidth = [72, 72]
+$ waterHeight = [20, 20]
+$ waterX = [18, 18]
+$ waterY = [20, 52]
 ```
 
 ## The Program
