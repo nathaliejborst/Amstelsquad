@@ -1,133 +1,170 @@
-from helpers import classes as cl
-from datetime import datetime
-from helpers import visualize as vs
+# Filename: algorithms.py
+# Authors: Nathalie Borst, Dennis Broekhuizen, Bob Hamelers
+#
+# Description: Contains the algorithms.
+
+from helpers import filewriter as fw
 from helpers import MinimumDistance as md
 from helpers import PlaceAndIntersect as pai
-from helpers import filewriter as fw
-import csv
+from helpers import visualize as vs
 import random
 import math
 
-repositionHouse = 15
+# Number of times trying to reposition all the houses in function improveValue.
+repositionHouse = 2
 
-def writeHousesToFile(grid):
-    with open('coordinatesHouses.csv', 'w', newline='') as filewriter:
-        fieldnames = ['x', 'y', 'width', 'value']
-        writer = csv.DictWriter(filewriter, fieldnames=fieldnames)
-        writer.writerow({'value': grid.value})
-        for house in grid.housesList:
-            writer.writerow({'x': house.x, 'y': house.y, 'width': house.width})
-
-def writeWaterbodiesToFile(grid):
-    with open('coordinatesWaterbodies.csv', 'w', newline='') as filewriter:
-        fieldnames = ['x', 'y', 'width', 'height']
-        writer = csv.DictWriter(filewriter, fieldnames=fieldnames)
-        for body in grid.waterBodiesList:
-            writer.writerow({'x': body.x, 'y': body.y, 'width': body.width, 'height': body.height})
 
 def hillClimber(house, grid, oldValue, temp_x, temp_y):
+    """Function for starting a hillclimber on a grid."""
+
+    # Set coördinates.
     house.x = temp_x
     house.y = temp_y
-    grid.value = oldValue               # Adjust new highest value in grid
-    md.adjustFreespace(grid)            # Adjusts freespace for all houses
+
+    # Adjust new highest value in grid.
+    grid.value = oldValue
+
+    # Adjust new freespace for all houses.
+    md.adjustFreespace(grid)
+
 
 def swapHouses(swapHouseCounter, oldValue, house, grid, swapHouseLevel):
-    # swapHouseLevel = 150
+    """Function to swap houses on a grid."""
+
+    # Counter as maximum to call to function swapHouse.
     swapHouseCounter += 1
     if swapHouseCounter > swapHouseLevel:
         oldValue, grid = pai.swapHouse(house, grid, oldValue)
         swapHouseCounter = 0
-        # print("     swapped house: {}".format(grid.totalValue()))
     return swapHouseCounter, oldValue
 
-def simulatedAnnealing(grid, newValue, oldValue, iteration, temperature, totalIterations):
+
+def simulatedAnnealing(grid, newValue, oldValue, iteration, temperature,
+                       totalIterations):
+    """Function for starting simulated annealing on a grid."""
+
+    # Set oldTemperature and endTemperature if temperature is higher then zero.
     if temperature > 0:
         oldTemperature = temperature
         endTemperature = 0
-        coolingRate = 0.01
 
-        # Calculate acceptance probability
+        # Calculate acceptance probability.
         acceptanceProbability = math.exp((newValue - oldValue) / temperature)
 
-        # Adjust to new temperature
-        # temperature *= 1 - coolingRate
-        temperature = oldTemperature - (iteration * (oldTemperature - endTemperature) / totalIterations)
+        # Adjust a new temperature with temperature formule.
+        temperature = oldTemperature - (iteration * (oldTemperature -
+                                        endTemperature) / totalIterations)
 
-        # reject deterioration
+        # Reject deterioration.
         if acceptanceProbability < random.random():
             print("   {}".format(acceptanceProbability))
-            # put house back in place
+            # Put house back in place.
             return False, temperature
-        # accept deterioration
+
+        # Accept deterioration.
         else:
-            print("accepted: prob({}), old: {}, new: {}  > temperature: {}".format(acceptanceProbability, oldValue, newValue, temperature))
+            print("accepted: prob({}), old: {}, new: {}  > \
+                  temperature: {}".format(acceptanceProbability, oldValue,
+                                          newValue, temperature))
             return True, temperature
+
+    # Reject deterioration if temperature is not higher then zero.
     else:
         return False, temperature
 
 
-
 def improveValue(grid, chosenAlgorithm, repeatAlgorithm):
+    """Function for improving the value of houses on the grid."""
+
+    # Set swap counter, swap level, temperature and iteration
     swapHouseCounter = 0
     swapHouseLevel = 150
     temperature = 1000000
     iteration = 0
+
+    # The total of iterations defined with a formule.
     totalIterations = repeatAlgorithm * len(grid.housesList) * repositionHouse
 
+    # Plot of the houses on a grid.
     vs.plot_houses(grid)
+
+    # Adjust new highest value in grid.
     oldValue = grid.value
+
+    # For loop for repeatAlgorithm, housesList, repositionHouse.
     for i in range(repeatAlgorithm):
         for house in grid.housesList:
-            for j in range(repositionHouse):            # Store x and y coordinates in temporary values if algrorithm can't find a better position to increase value
+            # Store x and y coordinates in temporary values if algrorithm
+            # can't find a better position to increase value.
+            for j in range(repositionHouse):
                 iteration += 1
                 temp_x = house.x
                 temp_y = house.y
-                pai.moveHouse(house, grid)              # Moves house and adjusts freespace for all houses
-                # Accept new value if value has improved
+
+                # Moves house and adjust freespace for all houses.
+                pai.moveHouse(house, grid)
+
+                # Accept new value if value has improved.
                 if grid.totalValue() >= oldValue:
                     swapHouseCounter = 0
                     oldValue = grid.totalValue()
-                    print("improved: {}".format(grid.value))
-                # Doesn't move house if value didn't increase so gives it back it's old coordinates
+                    print("Improved: {}".format(grid.value))
+
+                # Doesn't move house if value didn't increase
+                # so gives it back it's old coordinates.
                 else:
                     if chosenAlgorithm is 1:
-                        # Hillclimber puts house back at old position if value hasn't improved
+                        # Hillclimber puts house back at old position if
+                        # value hasn't improved.
                         hillClimber(house, grid, oldValue, temp_x, temp_y)
                     if chosenAlgorithm is 2:
-                        # the swap house function tries swapping a house with all the other houses to improve value
+                        # The swap house function tries swapping a house with
+                        # all the other houses to improve value.
                         hillClimber(house, grid, oldValue, temp_x, temp_y)
-                        swapHouseCounter, oldValue = swapHouses(swapHouseCounter, oldValue, house, grid, swapHouseLevel)
+                        swapHouseCounter, oldValue = \
+                            swapHouses(swapHouseCounter, oldValue, house, grid,
+                                       swapHouseLevel)
                         grid.totalValue()
-                    # Put house back in old position if the simulated annealing algrorithm does not accept deterioration
+                    # Put house back in old position if the simulated
+                    # annealing algrorithm does not accept deterioration.
                     if chosenAlgorithm is 3:
-                        accept, temperature = simulatedAnnealing(grid, grid.value, oldValue, iteration, temperature, totalIterations)
+                        accept, temperature = \
+                                simulatedAnnealing(grid, grid.value, oldValue,
+                                                   iteration, temperature,
+                                                   totalIterations)
                         if accept is False:
                             hillClimber(house, grid, oldValue, temp_x, temp_y)
-                    # Implements simulated annealing but if the algorithm does not accept deterioration try to swap the house
+                    # Implements simulated annealing but if the algorithm does
+                    # not accept deterioration try to swap the house
                     if chosenAlgorithm is 4:
-                        accept, temperature = simulatedAnnealing(grid, grid.value, oldValue, iteration, temperature, totalIterations)
+                        accept, temperature = \
+                                simulatedAnnealing(grid, grid.value, oldValue,
+                                                   iteration, temperature,
+                                                   totalIterations)
                         if accept is False:
                             hillClimber(house, grid, oldValue, temp_x, temp_y)
-                            swapHouseCounter, oldValue = swapHouses(swapHouseCounter, oldValue, house, grid, 0)
-            # print(grid.value)
-            print()
-        # Call to LivePlot function in visualize.py file with grid, i and repeatHillclimber
+                            swapHouseCounter, oldValue = \
+                                swapHouses(swapHouseCounter,
+                                           oldValue, house, grid, 0)
+            print("Iteration: {}".format(i))
+
+        # Call to LivePlot function in visualize.py file with grid,
+        # i and repeatHillclimber.
         vs.live_plot(grid, i, repeatAlgorithm)
+    # Call to trySwappingMaisons
     pai.trySwappingMaisons(grid)
     grid.totalValue()
-    print("!!! {} !!!".format(grid.value))
-    print(totalIterations)
-    vs.plot_houses(grid)
+    print("Final value: {}".format(grid.Value))
 
-    # Call to Writers functions
+    # Call to function filewriter.
     while True:
-        saveGrid = input("Save grid? (Y/N): ")
+        saveGrid = input("Save grid coördinates to replot? (Y/N): ")
         if saveGrid == 'Y':
-            writeHousesToFile(grid)
-            writeWaterbodiesToFile(grid)
+            fw.writeHousesToFile(grid)
+            fw.writeWaterbodiesToFile(grid)
             break
         if saveGrid == 'N':
             break
         else:
-            print(" Please enter Y or N")
+            print(" Please enter Y or N.")
             continue
