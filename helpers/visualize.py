@@ -102,5 +102,9 @@ def live_plot(grid, end, repeatHillclimber):
                             fontweight="bold")
         plt.show(block=True)
 
-    # Clear area at the end of function.
-    plt.cla()
+    # Delete all patches from plot while running live plot.
+    if end != repeatHillclimber:
+        plt.cla()
+
+    # Close plot at the end of function.
+    plt.close()

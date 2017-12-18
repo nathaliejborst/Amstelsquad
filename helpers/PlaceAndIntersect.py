@@ -232,7 +232,6 @@ def swapHouse(houseType, grid, oldValue):
         md.adjustFreespace(grid)
         grid.totalValue()
 
-        intersect = True
         if intersectWater(houseType, grid) is False \
            and intersectWater(house, grid) is False:
             if intersectHouse(houseType, grid) is False \
@@ -258,7 +257,7 @@ def swapHouse(houseType, grid, oldValue):
 
 
 def trySwappingMaisons(grid):
-    """Try to swap maisons."""
+    """Try to swap maisons for experiment."""
     oldValue = grid.totalValue()
 
     amountOfMaisons = 3 * cl.areaVariant
@@ -268,7 +267,6 @@ def trySwappingMaisons(grid):
             md.adjustFreespace(grid)
             grid.totalValue()
 
-            intersect = True
             if intersectWater(grid.housesList[i], grid) is False \
                and intersectWater(house, grid) is False:
                 if intersectHouse(grid.housesList[i], grid) is False \

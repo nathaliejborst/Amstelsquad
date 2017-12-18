@@ -108,7 +108,7 @@ def improveValue(grid, chosenAlgorithm, repeatAlgorithm):
                 if grid.totalValue() >= oldValue:
                     swapHouseCounter = 0
                     oldValue = grid.totalValue()
-                    print("Improved: {}".format(grid.value))
+                    print("   Improved: €{:,}".format(grid.value))
 
                 # Doesn't move house if value didn't increase
                 # so gives it back it's old coordinates.
@@ -146,15 +146,13 @@ def improveValue(grid, chosenAlgorithm, repeatAlgorithm):
                             swapHouseCounter, oldValue = \
                                 swapHouses(swapHouseCounter,
                                            oldValue, house, grid, 0)
-            print("Iteration: {}".format(i))
+        print("Iteration: {}".format(i+1))
 
         # Call to LivePlot function in visualize.py file with grid,
         # i and repeatHillclimber.
         vs.live_plot(grid, i, repeatAlgorithm)
-    # Call to trySwappingMaisons
-    pai.trySwappingMaisons(grid)
-    grid.totalValue()
-    print("Final value: {}".format(grid.Value))
+
+    print("\nFinal value: €{:,}\n".format(grid.value))
 
     # Call to function filewriter.
     while True:
